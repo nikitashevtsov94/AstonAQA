@@ -90,12 +90,11 @@ public class HomeWork9 {
             System.out.println(Arrays.toString(sqArray[i]));
             System.out.println();
         }
-        System.out.println(Arrays.toString(setArray(10, 88)));
-        System.out.println();
 
 
         //Task14
-        setArray(8, 35);
+        System.out.println(Arrays.toString(setArray(10, 88)));
+
     }
 
     //Task 1
