@@ -102,7 +102,7 @@ public class HomeWork9 {
     public static void printThreeWords(){
         System.out.println("Orange");
         System.out.println("Banana");
-        System.out.println("Orange");
+        System.out.println("Apple");
     }
 
     //Task2
