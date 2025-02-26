@@ -5,15 +5,46 @@ import java.util.Scanner;
 public class HomeWork9 {
 
     public static void main(String[] args) {
-        //System.out.println(isNumberPositive(3));
-        // printStingsSpecifiedNumberOfTimes("Чык-Чырык", 5);
-        /* Scanner scanner = new Scanner(System.in);
+        //Task1
+        printThreeWords();
+        System.out.println();
+
+        //Task2
+        checkSumSign();
+        System.out.println();
+
+        //Task3
+        printColor();
+        System.out.println();
+
+        //Task4
+        compareNumbers ();
+        System.out.println();
+
+        //Task5
+        System.out.println(rangeOfNumbers(5,12));
+        System.out.println();
+
+        //Task6
+        checkNumberSign(-3);
+        System.out.println();
+
+        //Task7
+        System.out.println(isNumberPositive(8));
+        System.out.println();
+
+        //Task8
+        printStingsSpecifiedNumberOfTimes("Строка", 5);
+        System.out.println();
+
+        //Task9
+        Scanner scanner = new Scanner(System.in);
         System.out.println("Введите год, чтобы узнать является ли он високосным");
         int year = scanner.nextInt();
         System.out.println(isLeapYear(year));
-        */
+        System.out.println();
+
         //Task10
-        /*
         int[] array1 = {0, 1, 0, 1, 1, 0, 0, 1, 0, 1};
         System.out.println(Arrays.toString(array1));
         for (int i = 0; i < array1.length; i++) {
@@ -24,20 +55,19 @@ public class HomeWork9 {
             }
         }
         System.out.println(Arrays.toString(array1));
-         */
+        System.out.println();
+
 
         //Task11
-        /*
         int[] array2 = new int[100];
         for (int i = 0; i < array2.length; i++) {
             array2[i] = i + 1;
         }
         System.out.println(Arrays.toString(array2));
+        System.out.println();
 
-         */
 
         //Task12
-        /*
         int[] array3 = {1, 5, 3, 2, 11, 4, 5, 2, 4, 8, 9, 1};
         System.out.println(Arrays.toString(array3));
         for (int i = 0; i < array3.length; i++) {
@@ -46,11 +76,11 @@ public class HomeWork9 {
             }
         }
         System.out.println(Arrays.toString(array3));
+        System.out.println();
 
-         */
-/*
+
         //Task13
-        int[][] sqArray  = new int[11][11];
+        int[][] sqArray  = new int[7][7];
         for (int i = 0; i < sqArray.length; i++) {
             for (int j = i; j < sqArray[i].length ; j++) {
                 sqArray[i][j] = 1;
@@ -60,10 +90,12 @@ public class HomeWork9 {
             System.out.println(Arrays.toString(sqArray[i]));
             System.out.println();
         }
-
- */
         System.out.println(Arrays.toString(setArray(10, 88)));
+        System.out.println();
 
+
+        //Task14
+        setArray(8, 35);
     }
 
     //Task 1
@@ -86,7 +118,7 @@ public class HomeWork9 {
 
     //Task3
     public static void printColor(){
-        int value = 500;
+        int value = 100;
         if (value <= 0) {
             System.out.println("Красный");
         } else if (value > 0 && value <= 100) {
@@ -144,9 +176,9 @@ public class HomeWork9 {
 
     //Task9
     public static boolean isLeapYear(int year){
-        if (year % 4 == 0 && year % 100 == 0 && year % 400 == 0){
+        if (year % 400 == 0){
             return true;
-        } else if (year % 4 == 0 && year % 100 == 0) {
+        } else if (year % 100 == 0) {
             return false;
         } else if (year % 4 == 0) {
             return true;
