@@ -1,16 +1,10 @@
 public class Dog extends Animals {
-    private static int dogCount = 0;
-    private String color;
-
-    public String getColor() {
-        return color;
-    }
+    private static int dogsCount = 0;
 
     public Dog(String name, String color) {
-        super(name);
-        this.color = color;
-        System.out.printf("Прибежала %s собака %s%n", getColor(), getName());
-        dogCount++;
+        super(name, color);
+        System.out.printf("Прибежала %s собака %s.%n", getColor(), getName());
+        dogsCount++;
     }
 
     @Override
@@ -40,7 +34,7 @@ public class Dog extends Animals {
 
 
     public static void getDogsCount() {
-        System.out.println(dogCount);
+        System.out.println("Количество всех собак: " + dogsCount);
     }
 
 }

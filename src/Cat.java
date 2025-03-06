@@ -1,16 +1,11 @@
 public class Cat extends Animals {
-    private static int catCount = 0;
-    private String color;
+    private static int catsCount = 0;
     private boolean satiety = false;
     private int levelOfSatiety;
 
-    public String getColor() {
-        return color;
-    }
 
     public Cat(String name, String color, int levelOfSatiety) {
-        super(name);
-        this.color = color;
+        super(name, color);
         if (levelOfSatiety < 0) {
             this.levelOfSatiety = 1;
             System.out.println("Чувство насыщения кота не может быть отрицательным. Поэтому этот кот будет есть совсем немного");
@@ -18,13 +13,13 @@ public class Cat extends Animals {
             this.levelOfSatiety = levelOfSatiety;
             System.out.printf("Прибежал %s кот %s. Кажется, он голоден.%n", getColor(), getName());
         }
-        catCount++;
+        catsCount++;
     }
 
     @Override
     public void run(int runDist) {
         if(runDist > 0 && runDist <= 200) {
-            System.out.printf("Кот %s пробежал %d%n", getName(), runDist);
+            System.out.printf("Кот %s пробежал %d м.%n", getName(), runDist);
         }
         else {
             System.out.printf("%s кот %s пробежал 200 метров и упал без сил.%n", getColor(), getName());
@@ -37,7 +32,7 @@ public class Cat extends Animals {
     }
 
     public static void getCatsCount() {
-        System.out.println(catCount);
+        System.out.println("Количество всех котов: " + catsCount);
     }
 
     public boolean getSatiety() {
@@ -51,12 +46,12 @@ public class Cat extends Animals {
     @Override
     public int eat(int amountOfFood) {
         if(amountOfFood >= this.levelOfSatiety) {
-            System.out.printf("Кот %s наелся.%n", getName());
             this.satiety = true;
+            System.out.printf("Кот %s наелся(%b).%n", getName(), satiety);
             amountOfFood = amountOfFood - this.levelOfSatiety;
             return amountOfFood;
         } else {
-            System.out.printf("Коту %s недостаточно еды, чтобы стать сытым.%n", getName());
+            System.out.printf("Коту %s недостаточно еды, чтобы стать сытым(%b).%n", getName(), satiety);
             return amountOfFood;
         }
     }

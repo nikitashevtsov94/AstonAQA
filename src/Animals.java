@@ -1,11 +1,13 @@
 public abstract class Animals {
     private String name;
+    private String color;
 
-    public static int animalCount = 0;
+    public static int animalsCount = 0;
 
-    public Animals(String name) {
+    public Animals(String name, String color) {
         this.name = name;
-        animalCount++;
+        this.color = color;
+        animalsCount++;
     }
     public abstract void run(int runDist);
 
@@ -14,11 +16,15 @@ public abstract class Animals {
     public abstract int eat(int amountOfFood);
 
     public static void getAnimalsCount() {
-        System.out.println(animalCount);
+        System.out.println("Количество всех животный: " + animalsCount);
     }
 
     public String getName() {
         return name;
+    }
+
+    public String getColor() {
+        return color;
     }
 
 

@@ -7,7 +7,7 @@ public class Bowl {
 
     public Bowl(int bowlVolume) {
         this.bowlVolume = bowlVolume;
-        System.out.printf("Поставили миску объемом %d гр.%n", bowlVolume);
+        System.out.printf("Поставили миску для еды массой до %d гр.%n", bowlVolume);
     }
 
     public int getBowlVolume() {
@@ -22,7 +22,7 @@ public class Bowl {
             System.out.printf("В миску насыпали %d гр. еды%n", foodVolume);
             return foodVolume;
         } else {
-            System.out.println("В миску нельзя положить столько еды, пожтому она пуста. Присмотрись к объему миски");
+            System.out.println("В миску нельзя положить столько еды, поэтому она пуста. Присмотрись к объему миски.");
             return 0;
         }
 
