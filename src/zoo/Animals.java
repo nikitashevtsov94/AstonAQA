@@ -1,3 +1,5 @@
+package zoo;
+
 public abstract class Animals {
     private String name;
     private String color;

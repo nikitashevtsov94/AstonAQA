@@ -1,3 +1,5 @@
+package zoo;
+
 public class Cat extends Animals {
     private static int catsCount = 0;
     private boolean satiety = false;

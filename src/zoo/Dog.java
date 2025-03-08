@@ -1,3 +1,5 @@
+package zoo;
+
 public class Dog extends Animals {
     private static int dogsCount = 0;
 
