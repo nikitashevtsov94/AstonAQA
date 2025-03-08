@@ -1,9 +1,9 @@
 package figures;
 
 public interface CircleOperations {
-    double PI =  Math.PI;
-    default double calculateCircPerimeter(double r) {
-        return 2 * PI * r;
+    default double calculateCirclePerimeter(double r) {
+        return 2 * Math.PI * r;
     }
-    double calculateCircArea();
+
+    double calculateCircleArea();
 }

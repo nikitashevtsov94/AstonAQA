@@ -1,6 +1,7 @@
 package zoo;
 
 public class Dog extends Animals {
+
     private static int dogsCount = 0;
 
     public Dog(String name, String color) {
@@ -11,20 +12,22 @@ public class Dog extends Animals {
 
     @Override
     public void run(int runDist) {
-        if(runDist > 0 && runDist <= 500) {
+        if (runDist > 0 && runDist <= 500) {
             System.out.printf("%s собака %s пробежала %d м.%n", getColor(), getName(), runDist);
-        }
-        else {
+        } else if (runDist <= 0) {
+            System.out.println("Собаки бегают только вперед");
+        } else {
             System.out.printf("%s собака %s пробежала 500 метров и упала без сил.%n", getColor(), getName());
         }
     }
 
     @Override
     public void swim(int swimDist) {
-        if(swimDist > 0 && swimDist <= 10) {
+        if (swimDist > 0 && swimDist <= 10) {
             System.out.printf("Собака %s с удовольствие прыгнула в воду и проплыла %d м.%n", getName(), swimDist);
-        }
-        else {
+        } else if (swimDist <= 0) {
+            System.out.println("Собаки не плавают задом наперед");
+        } else {
             System.out.printf("%s собака %s почуял, что не проплывет больше 10 м и вернулась на берег.%n", getColor(), getName());
         }
     }
@@ -32,11 +35,9 @@ public class Dog extends Animals {
     @Override
     public int eat(int amountOfFood) {
         return amountOfFood;
-        }
-
+    }
 
     public static void getDogsCount() {
         System.out.println("Количество всех собак: " + dogsCount);
     }
-
 }

@@ -1,68 +1,49 @@
 package figures;
 
-public class Triangle implements TriangleOperations {
-    private double h;
-    private double a;
-    private double b;
-    private double c;
-    private String borderColor;
-    private String innerColor;
+public class Triangle extends Figure implements TriangleOperations {
+    private double height;
+    private double sideA;
+    private double sideB;
+    private double sideC;
 
-    public double getA() {
-        return a;
+    public double getSideA() {
+        return sideA;
     }
 
-    public void setA(double a) {
-        this.a = a;
+    public void setSideA(double sideA) {
+        this.sideA = sideA;
     }
 
-    public void setH(double h) {
-        this.h = h;
+    public void setHeight(double height) {
+        this.height = height;
     }
 
-    public double getH() {
-        return h;
+    public double getHeight() {
+        return height;
     }
 
-    public double getB() {
-        return b;
+    public double getSideB() {
+        return sideB;
     }
 
-    public void setB(double b) {
-        this.b = b;
+    public void setSideB(double sideB) {
+        this.sideB = sideB;
     }
 
-    public double getC() {
-        return c;
+    public double getSideC() {
+        return sideC;
     }
 
-    public void setC(double c) {
-        this.c = c;
+    public void setSideC(double sideC) {
+        this.sideC = sideC;
     }
 
-    public String getInnerColor() {
-        return innerColor;
-    }
-
-    public void setInnerColor(String innerColor) {
-        this.innerColor = innerColor;
-    }
-
-    public String getBorderColor() {
-        return borderColor;
-    }
-
-    public void setBorderColor(String borderColor) {
-        this.borderColor = borderColor;
-    }
-
-    public Triangle(double h, double a, double b, double c, String borderColor, String innerColor) {
-        this.h = h;
-        this.a = a;
-        this.b = b;
-        this.c = c;
-        this.borderColor = borderColor;
-        this.innerColor = innerColor;
+    public Triangle(double height, double sideA, double sideB, double sideC, String borderColor, String innerColor) {
+        super(borderColor, innerColor);
+        this.height = height;
+        this.sideA = sideA;
+        this.sideB = sideB;
+        this.sideC = sideC;
     }
 
     public void getTriangleInfo(double trP, double trS) {
@@ -72,11 +53,6 @@ public class Triangle implements TriangleOperations {
 
     @Override
     public double calculateTrArea() {
-        return 0.5 * (this.h * this.a);
+        return 0.5 * (this.height * this.sideA);
     }
-
-
-
-
-
 }

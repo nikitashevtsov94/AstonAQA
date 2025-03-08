@@ -1,10 +1,10 @@
 package zoo;
 
 public class Cat extends Animals {
+
     private static int catsCount = 0;
     private boolean satiety = false;
     private int levelOfSatiety;
-
 
     public Cat(String name, String color, int levelOfSatiety) {
         super(name, color);
@@ -20,10 +20,11 @@ public class Cat extends Animals {
 
     @Override
     public void run(int runDist) {
-        if(runDist > 0 && runDist <= 200) {
+        if (runDist > 0 && runDist <= 200) {
             System.out.printf("Кот %s пробежал %d м.%n", getName(), runDist);
-        }
-        else {
+        } else if (runDist <= 0) {
+            System.out.println("Коты гордые и не бегут назад ");
+        } else {
             System.out.printf("%s кот %s пробежал 200 метров и упал без сил.%n", getColor(), getName());
         }
     }
@@ -47,17 +48,13 @@ public class Cat extends Animals {
 
     @Override
     public int eat(int amountOfFood) {
-        if(amountOfFood >= this.levelOfSatiety) {
+        if (amountOfFood >= this.levelOfSatiety) {
             this.satiety = true;
             System.out.printf("Кот %s наелся(%b).%n", getName(), satiety);
             amountOfFood = amountOfFood - this.levelOfSatiety;
-            return amountOfFood;
         } else {
             System.out.printf("Коту %s недостаточно еды, чтобы стать сытым(%b).%n", getName(), satiety);
-            return amountOfFood;
         }
+        return amountOfFood;
     }
-
-
-
 }

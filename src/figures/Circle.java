@@ -1,48 +1,28 @@
 package figures;
 
-public class Circle implements CircleOperations{
-        private double r;
-        private static final double PI = Math.PI;
-        private String borderColor;
-        private String innerColor;
+public class Circle extends Figure implements CircleOperations {
+    private double radius;
 
-        public double getA() {
-            return r;
-        }
+    public double getRadius() {
+        return radius;
+    }
 
-        public void setA(double r) {
-            this.r = r;
-        }
+    public void setRadius(double radius) {
+        this.radius = radius;
+    }
 
-        public String getInnerColor() {
-            return innerColor;
-        }
+    public Circle(double radius, String borderColor, String innerColor) {
+        super(borderColor, innerColor);
+        this.radius = radius;
+    }
 
-        public void setInnerColor(String innerColor) {
-            this.innerColor = innerColor;
-        }
+    public void getCircleInfo(double circP, double circS) {
+        System.out.printf("Периметр круга = %.2f, Площадь круга = %.2f, Цвет границы: %s, Цвет заливки: %s.%n",
+                circP, circS, getBorderColor(), getInnerColor());
+    }
 
-        public String getBorderColor() {
-            return borderColor;
-        }
-
-        public void setBorderColor(String borderColor) {
-            this.borderColor = borderColor;
-        }
-
-        public Circle(double r, String borderColor, String innerColor) {
-            this.r = r;
-            this.borderColor = borderColor;
-            this.innerColor = innerColor;
-        }
-
-        public void getCircleInfo(double circP, double circS) {
-            System.out.printf("Периметр круга = %.2f, Площадь круга = %.2f, Цвет границы: %s, Цвет заливки: %s.%n",
-                    circP, circS, getBorderColor(), getInnerColor());
-        }
-
-        @Override
-        public double calculateCircArea() {
-            return (Math.pow(this.r, 2) * PI);
-        }
+    @Override
+    public double calculateCircleArea() {
+        return (Math.pow(this.radius, 2) * Math.PI);
+    }
 }

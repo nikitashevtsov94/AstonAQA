@@ -1,16 +1,18 @@
 package zoo;
 
 public abstract class Animals {
-    private String name;
-    private String color;
 
-    public static int animalsCount = 0;
+    private final String name;
+    private final String color;
 
-    public Animals(String name, String color) {
+    private static int animalsCount = 0;
+
+    protected Animals(String name, String color) {
         this.name = name;
         this.color = color;
         animalsCount++;
     }
+
     public abstract void run(int runDist);
 
     public abstract void swim(int swimDist);
@@ -28,8 +30,4 @@ public abstract class Animals {
     public String getColor() {
         return color;
     }
-
-
-
-
 }

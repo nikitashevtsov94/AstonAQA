@@ -1,48 +1,29 @@
 package figures;
 
-public class Rectangle implements RectangleOperations {
-    private double a;
-    private double b;
-    private String borderColor;
-    private String innerColor;
+public class Rectangle extends Figure implements RectangleOperations {
+    private double sideA;
+    private double sideB;
 
-    public double getA() {
-        return a;
+    public double getSideA() {
+        return sideA;
     }
 
-    public void setA(double a) {
-        this.a = a;
+    public void setSideA(double sideA) {
+        this.sideA = sideA;
     }
 
-    public double getB() {
-        return b;
+    public double getSideB() {
+        return sideB;
     }
 
-    public void setB(double b) {
-        this.b = b;
+    public void setSideB(double sideB) {
+        this.sideB = sideB;
     }
 
-    public String getInnerColor() {
-        return innerColor;
-    }
-
-    public void setInnerColor(String innerColor) {
-        this.innerColor = innerColor;
-    }
-
-    public String getBorderColor() {
-        return borderColor;
-    }
-
-    public void setBorderColor(String borderColor) {
-        this.borderColor = borderColor;
-    }
-
-    public Rectangle(double a, double b, String borderColor, String innerColor) {
-        this.a = a;
-        this.b = b;
-        this.borderColor = borderColor;
-        this.innerColor = innerColor;
+    public Rectangle(double sideA, double sideB, String borderColor, String innerColor) {
+        super(borderColor, innerColor);
+        this.sideA = sideA;
+        this.sideB = sideB;
     }
 
     public void getRectangleInfo(double recP, double recS) {
@@ -52,6 +33,6 @@ public class Rectangle implements RectangleOperations {
 
     @Override
     public double calculateRecArea() {
-        return (this.a * this.b);
+        return (this.sideA * this.sideB);
     }
 }
