@@ -22,7 +22,6 @@ public class Main {
         } catch (ArrayIndexOutOfBoundsException e) {
             System.out.printf("Получено исключение: %s%n", e.getMessage());
         }
-
     }
 
     private static void sumElementsOfArrayFourByFour(String[][] stringArray) throws MyArraySizeException {
@@ -46,12 +45,10 @@ public class Main {
                 } catch (NumberFormatException e) {
                     throw new MyArrayDataException(String.format("Элемент %d х %d не является числом", i, j));
                 }
-
                 summ = summ + temp;
             }
         }
         System.out.println("Сумма элементов массива равна: " + summ);
-
     }
 
     private static void checkArrayElement(int [] array, int index) throws ArrayIndexOutOfBoundsException {
@@ -59,8 +56,6 @@ public class Main {
             throw new ArrayIndexOutOfBoundsException("Указан индекс за пределами размерности массива");
         }
     }
-
-
 }
 
 
