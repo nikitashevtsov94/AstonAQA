@@ -7,8 +7,8 @@ public class Main {
         ArrayList<Student> students = new ArrayList<>();
         Set<Student> secondStudents = new HashSet<>();
 
-        Student student1 = new Student("Иван", "A", 2, Arrays.asList());
-        Student student2 = new Student("Пётр", "B", 4, Arrays.asList(5, 5, 5, 5));
+        Student student1 = new Student("Иван", "A", 2, Arrays.asList(1, 2, 4, 1));
+        Student student2 = new Student("Пётр", "B", 3, Arrays.asList(5, 5, 5, 5));
         Student student3 = new Student("Дарья", "C", 3, Arrays.asList(1, 2, 5, 5));
         Student student4 = new Student("Владимир", "D", 2, Arrays.asList(3, 5, 4, 4));
 
@@ -22,14 +22,12 @@ public class Main {
         secondStudents.add(student3);
         secondStudents.add(student4);
 
-//        getStudentsInfo(students);
-//        excludeFromUniversity(students);
-//        getStudentsInfo(students);
-//        transitToNextCourse(students);
-//        getStudentsInfo(students);
-        printStudent(secondStudents, 2);
-
-
+        getStudentsInfo(students);
+        excludeFromUniversity(students);
+        getStudentsInfo(students);
+        transitToNextCourse(students);
+        getStudentsInfo(students);
+        printStudent(secondStudents, 4);
     }
 
     public static void getStudentsInfo(List<Student> students) {
@@ -47,7 +45,7 @@ public class Main {
                     students.remove(student);
                 }
             } catch (MyArithmeticException e) {
-                System.out.printf("У студента %s отсутствуют оценки.%n", student.getName());
+                System.out.println(e.getMessage());
             }
         }
     }
@@ -61,7 +59,7 @@ public class Main {
                     System.out.printf("Студент %s переведен на следующий курс.%n", student.getName());
                 }
             } catch (MyArithmeticException e) {
-                System.out.printf("У студента %s отсутствуют оценки.%n", student.getName());
+                System.out.println(e.getMessage());
             }
         }
     }
@@ -69,7 +67,7 @@ public class Main {
     private static double calculateAverageGrade(Student student) throws MyArithmeticException {
         int size = student.getGrades().size();
         if (size == 0) {
-            throw new MyArithmeticException(String.format("У студента %s отсутствуют оценки.%n", student.getName()));
+            throw new MyArithmeticException("У студента " + student.getName() + " отсутствуют оценки.");
         }
         int sum = 0;
         for (int i = 0; i < size; i++) {
