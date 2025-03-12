@@ -19,6 +19,8 @@ public class Main {
         getStudentsInfo(students);
         excludeFromUniversity(students);
         getStudentsInfo(students);
+        transitToNextCourse(students);
+        getStudentsInfo(students);
 
 
 
@@ -42,8 +44,24 @@ public class Main {
                 students.remove(student);
             }
         }
+    }
 
+    public static void transitToNextCourse(List<Student> students) {
+        for (int j = 0; j < students.size(); j++) {
+            Student student = students.get(j);
+            int size = student.getGrades().size();
+            int sum = 0;
+            for (int i = 0; i < size; i++) {
+                sum = sum + student.getGrades().get(i);
+            }
+            if ((double) (sum / size) >= 3) {
+                student.setCourse(student.getCourse() + 1);
+                System.out.printf("Студент %s переведен на следующий курс.%n", student.getName());
+            }
+        }
+    }
 
+    private static double calculateAverageGrade() {
 
     }
 }
