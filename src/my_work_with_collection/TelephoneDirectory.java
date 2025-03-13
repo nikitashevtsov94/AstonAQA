@@ -1,4 +1,4 @@
-package myWorkWithCollection;
+package my_work_with_collection;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -19,14 +19,17 @@ public class TelephoneDirectory {
         }
     }
 
-    public void searchName(String lastName) {
+    public void getPhoneNumberByName(String lastName) {
         System.out.printf("Поиск номера телефона для контакта: %s.%nРезультат поиска:%n", lastName);
+        boolean search = false;
         for (Map.Entry<Integer, String> entry : entrySet) {
             if (lastName.equals(entry.getValue())) {
                 System.out.println(entry.getKey());
+                search = true;
             }
         }
+        if (!search) {
+            System.out.println("Отсутствует номер телефона для контакта с фамилией: " + lastName);
+        }
     }
-
-
 }

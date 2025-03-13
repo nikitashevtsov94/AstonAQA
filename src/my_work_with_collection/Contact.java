@@ -1,4 +1,4 @@
-package myWorkWithCollection;
+package my_work_with_collection;
 
 public class Contact {
     private int phone;
