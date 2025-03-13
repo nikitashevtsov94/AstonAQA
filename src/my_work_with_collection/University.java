@@ -5,6 +5,10 @@ import java.util.Set;
 
 public class University {
 
+    private University() {
+
+    }
+
     public static void getStudentsInfo(Set<Student> students) {
         for (Student student : students) {
             System.out.println(student);

@@ -7,7 +7,7 @@ public class Student {
     private String name;
     private String group;
     private int course;
-    private List<Integer> grades;
+    private final List<Integer> grades;
 
     public String getName() {
         return name;
@@ -47,12 +47,9 @@ public class Student {
         this.course = course;
         this.grades = new ArrayList<>(grades);
     }
+
     @Override
     public String toString() {
         return String.format("Имя студента: %s, Группа: %s, Курс: %d, Оценки: %s", name, group, course, grades);
     }
-
-
-
-
 }

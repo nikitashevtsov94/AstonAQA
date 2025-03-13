@@ -1,14 +1,14 @@
 package my_work_with_collection;
 
 public class Contact {
-    private int phone;
-    private  String lastName;
+    private String phone;
+    private String lastName;
 
-    public int getPhone() {
+    public String getPhone() {
         return phone;
     }
 
-    public void setPhone(int phone) {
+    public void setPhone(String phone) {
         this.phone = phone;
     }
 
@@ -20,9 +20,9 @@ public class Contact {
         this.lastName = lastName;
     }
 
-    public Contact(String lastName, int phone) {
+    public Contact(String lastName, String phone) {
         this.lastName = lastName;
-        this.phone =phone;
-        System.out.printf("Создан новый телефонный контакт: Имя %s - Телефон %d.%n", lastName, phone);
+        this.phone = phone;
+        System.out.printf("Создан новый телефонный контакт: Имя %s - Телефон %s.%n", lastName, phone);
     }
 }

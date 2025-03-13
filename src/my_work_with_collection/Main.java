@@ -27,10 +27,10 @@ public class Main {
         //Task2
         TelephoneDirectory telephoneDirectory = new TelephoneDirectory();
 
-        Contact contact1 = new Contact("Иванов", 297636161);
-        Contact contact2 = new Contact("Петров", 297636060);
-        Contact contact3 = new Contact("Сидоров", 333323232);
-        Contact contact4 = new Contact("Иванов", 296005020);
+        Contact contact1 = new Contact("Иванов", "297636161");
+        Contact contact2 = new Contact("Петров", "297636060");
+        Contact contact3 = new Contact("Сидоров", "333323232");
+        Contact contact4 = new Contact("Иванов", "296005020");
 
         telephoneDirectory.addNewContact(contact1);
         telephoneDirectory.addNewContact(contact2);
@@ -39,9 +39,6 @@ public class Main {
 
         telephoneDirectory.getAllInfoFromTelephoneDirectory();
 
-        telephoneDirectory.getPhoneNumberByName("Иванов");
-
+        telephoneDirectory.getPhoneNumberByLastName("Иванов");
     }
-
-
 }
