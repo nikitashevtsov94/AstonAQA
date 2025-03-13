@@ -5,30 +5,24 @@ import java.util.*;
 public class Main {
     public static void main(String[] args) {
         //Task1
-//        ArrayList<Student> students = new ArrayList<>();
-//        Set<Student> secondStudents = new HashSet<>();
-//
-//        Student student1 = new Student("Иван", "A", 2, Arrays.asList(1, 2, 4, 1));
-//        Student student2 = new Student("Пётр", "B", 3, Arrays.asList(5, 5, 5, 5));
-//        Student student3 = new Student("Дарья", "C", 3, Arrays.asList(1, 2, 5, 5));
-//        Student student4 = new Student("Владимир", "D", 2, Arrays.asList(3, 5, 4, 4));
-//
-//        students.add(student1);
-//        students.add(student2);
-//        students.add(student3);
-//        students.add(student4);
-//
-//        secondStudents.add(student1);
-//        secondStudents.add(student2);
-//        secondStudents.add(student3);
-//        secondStudents.add(student4);
-//
-//        getStudentsInfo(students);
-//        excludeFromUniversity(students);
-//        getStudentsInfo(students);
-//        transitToNextCourse(students);
-//        getStudentsInfo(students);
-//        printStudent(secondStudents, 4);
+        HashSet<Student> students = new HashSet<>();
+
+        Student student1 = new Student("Иван", "A", 2, Arrays.asList(1, 2, 4, 1));
+        Student student2 = new Student("Пётр", "B", 3, Arrays.asList(5, 5, 5, 5));
+        Student student3 = new Student("Дарья", "C", 3, Arrays.asList(1, 2, 5, 5));
+        Student student4 = new Student("Владимир", "D", 2, Arrays.asList(3, 5, 4, 4));
+
+        students.add(student1);
+        students.add(student2);
+        students.add(student3);
+        students.add(student4);
+
+        getStudentsInfo(students);
+        excludeFromUniversity(students);
+        getStudentsInfo(students);
+        transitToNextCourse(students);
+        getStudentsInfo(students);
+        printStudent(students, 4);
 
         //Task2
         TelephoneDirectory telephoneDirectory = new TelephoneDirectory();
@@ -49,19 +43,20 @@ public class Main {
 
     }
 
-    public static void getStudentsInfo(List<Student> students) {
+    public static void getStudentsInfo(Set<Student> students) {
         for (Student student : students) {
             System.out.println(student);
         }
     }
 
-    public static void excludeFromUniversity(List<Student> students) {
-        for (int j = students.size() - 1; j >= 0; j--) {
-            Student student = students.get(j);
+    public static void excludeFromUniversity(Set<Student> students) {
+        Iterator<Student> iterator = students.iterator();
+        while (iterator.hasNext()) {
+            Student student = iterator.next();
             try {
                 double average = calculateAverageGrade(student);
                 if (average < 3) {
-                    students.remove(student);
+                    iterator.remove();
                 }
             } catch (MyArithmeticException e) {
                 System.out.println(e.getMessage());
@@ -69,7 +64,7 @@ public class Main {
         }
     }
 
-    public static void transitToNextCourse(List<Student> students) {
+    public static void transitToNextCourse(Set<Student> students) {
         for (Student student : students) {
             try {
                 double average = calculateAverageGrade(student);
