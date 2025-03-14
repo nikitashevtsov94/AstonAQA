@@ -1,19 +1,39 @@
+import java.math.BigInteger;
+
 public class Programs {
 
     public static void main(String[] args) {
-        System.out.println(calculateFactorial(3));
-        System.out.println(calculateTriangleArea(5.00, 6.00));
-    }
-
-    public static int calculateFactorial(int n) {
-        int factorial = n;
-        for (int i = 1; i < n; i++) {
-            factorial = factorial * (n - i);
+        try {
+            System.out.println(calculateFactorial(-2));
+        } catch (ArithmeticException e) {
+            System.out.println(e.getMessage());
         }
-        return factorial;
+        try {
+            System.out.println(calculateTriangleArea(5.00, 6.00));
+        } catch (InvalideTriangleException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
-    public static double calculateTriangleArea (double sideLength, double highLength) {
+    public static BigInteger calculateFactorial(int n) throws ArithmeticException {
+        if (n < 0) {
+            throw new ArithmeticException("Нельзя вычислить факториал отрицательного числа");
+        }
+        if (n == 0) {
+            return BigInteger.ONE;
+        } else {
+            BigInteger factorial = BigInteger.ONE;
+            for (int i = 1; i <= n; i++) {
+                factorial = factorial.multiply((BigInteger.valueOf(i)));
+            }
+            return factorial;
+        }
+    }
+
+    public static double calculateTriangleArea (double sideLength, double highLength) throws InvalideTriangleException {
+        if (highLength > sideLength) {
+            throw new InvalideTriangleException("Такой треугольник не может существовать");
+        }
         return 0.5 * sideLength * highLength;
     }
 
