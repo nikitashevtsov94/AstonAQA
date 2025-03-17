@@ -28,7 +28,7 @@ public class Triangle {
     public double calculateArea(double sideLength, double highLength) throws InvalideTriangleException {
         this.sideLength = sideLength;
         this.highLength = highLength;
-        if (highLength > sideLength) {
+        if (highLength > sideLength || highLength <= 0 || sideLength <= 0) {
             throw new InvalideTriangleException("Такой треугольник не может существовать");
         }
         return 0.5 * sideLength * highLength;
