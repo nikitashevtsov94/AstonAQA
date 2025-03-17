@@ -6,12 +6,12 @@ public class Programms {
 
     public static void main(String[] args) {
         try {
-            System.out.println(calculateFactorial(-2));
+            System.out.println(calculateFactorial(10));
         } catch (ArithmeticException e) {
             System.out.println(e.getMessage());
         }
         try {
-            System.out.println(calculateTriangleArea(5.00, 6.00));
+            System.out.println(calculateTriangleArea(-5.00, -6.00));
         } catch (InvalideTriangleException e) {
             System.out.println(e.getMessage());
         }
@@ -33,8 +33,11 @@ public class Programms {
     }
 
     public static double calculateTriangleArea(double sideLength, double highLength) throws InvalideTriangleException {
-        if (highLength > sideLength) {
+        if (highLength > sideLength || sideLength == 0 || highLength == 0) {
             throw new InvalideTriangleException("Такой треугольник не может существовать");
+        }
+        if (highLength < 0 || sideLength < 0) {
+            throw new InvalideTriangleException("Длины высот и сторон не могут быть отрицательными");
         }
         return 0.5 * sideLength * highLength;
     }
