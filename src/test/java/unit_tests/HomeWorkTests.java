@@ -7,6 +7,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.w3c.dom.ls.LSOutput;
 
 import java.math.BigInteger;
@@ -37,22 +38,28 @@ class HomeWorkTests {
                 "В расчете площади треугольника присутствует ошибка");
     }
 
-    @Test
+    @ParameterizedTest(name = "Проверка вычисления площади треугольника из набора негативных данных" +
+            " {index} для длины стороны {1} и длины высоты {0}")
+    @MethodSource(value = "dataProviderForTriangleArea")
     @DisplayName("Тест функции расчета площади треугольника с негативными данными")
-    void testTriangleAreaNegativeInoutData() {
-        Assertions.assertAll(
-                () -> Assertions.assertThrows(InvalideTriangleException.class,
-                        () -> Programms.calculateTriangleArea(0, 1), "Такой треугольник не существует"),
-                () -> Assertions.assertThrows(InvalideTriangleException.class,
-                        () -> Programms.calculateTriangleArea(0, 0), "Такой треугольник не существует"),
-                () -> Assertions.assertThrows(InvalideTriangleException.class,
-                        () -> Programms.calculateTriangleArea(1, 0), "Такой треугольник не существует"),
-                () -> Assertions.assertThrows(InvalideTriangleException.class,
-                        () -> Programms.calculateTriangleArea(-1, 2), "Такой треугольник не существует"),
-                () -> Assertions.assertThrows(InvalideTriangleException.class,
-                        () -> Programms.calculateTriangleArea(-1, -1), "Такой треугольник не существует")
-        );
+    void testTriangleAreaNegativeInoutData(double sideLength, double highLength) {
+        Assertions.assertThrows(InvalideTriangleException.class, () -> Programms.calculateTriangleArea(sideLength, highLength),
+                "Такой треугольник не существует");
+    }
 
+    @ParameterizedTest(name = "Набор данных для проверки математических операций теста {index}, " +
+            "на вход подаются числа {4} и {5}. Сумма: {0}, разность: {1}, произведение {2}, частное: {3} ")
+    @MethodSource(value = "dataProviderForCalculationOperations")
+    @DisplayName("Тест проверки расчета математических операций суммы, разности, произведения, частного")
+    void calculationOperationsTest(double sum, double subtract, double mul, double div, int numberOne, int numberTwo) {
+        Assertions.assertDoesNotThrow(() -> Programms.calculateSumSubtractionMultiplicationDivision(numberOne, numberTwo));
+        double[] resultOperation = Programms.calculateSumSubtractionMultiplicationDivision(numberOne, numberTwo);
+        assertAll(
+                () -> Assertions.assertEquals(sum, resultOperation[0]),
+                () -> Assertions.assertEquals(subtract, resultOperation[1]),
+                () -> Assertions.assertEquals(mul, resultOperation[2]),
+                () -> Assertions.assertEquals(div, resultOperation[3])
+        );
     }
 
     private static Object[][] dataProviderForFactorial() {
@@ -61,6 +68,20 @@ class HomeWorkTests {
                 {1, 0},
                 {24, 4},
                 {3628800 , 10}
+        };
+    }
+    private static Object[][] dataProviderForTriangleArea() {
+        return new Object[][] {
+                {0, 1},
+                {1, 0},
+                {0, 0},
+                {-1, 2},
+                {-1, -1}
+        };
+    }
+    private static Object[][] dataProviderForCalculationOperations() {
+        return new Object[][] {
+                {1.0, -1.0, 0.0, 0.0, 0, 1}
         };
     }
 

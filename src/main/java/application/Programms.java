@@ -1,6 +1,7 @@
 package application;
 
 import java.math.BigInteger;
+import java.util.Arrays;
 
 public class Programms {
 
@@ -11,10 +12,16 @@ public class Programms {
             System.out.println(e.getMessage());
         }
         try {
-            System.out.println(calculateTriangleArea(-5.00, -6.00));
+            System.out.println(calculateTriangleArea(0, 1));
         } catch (InvalideTriangleException e) {
             System.out.println(e.getMessage());
         }
+        try {
+            calculateSumSubtractionMultiplicationDivision(0, 1);
+        } catch (ArithmeticException e) {
+            System.out.println(e.getMessage());
+        }
+
     }
 
     public static BigInteger calculateFactorial(int n) throws ArithmeticException {
@@ -42,9 +49,17 @@ public class Programms {
         return 0.5 * sideLength * highLength;
     }
 
-    public static void calculateSumSubtractionMultiplicationDivision(int numberOne, int numberTwo) {
-        System.out.printf("Сумма чисел: %d.%nРазность чисел: %d.%nПроизведение чисел: %d.%nЧастное из чисел: %d.%n",
-                numberOne + numberTwo, numberOne - numberTwo, numberOne * numberTwo, numberOne + numberTwo);
+    public static double[] calculateSumSubtractionMultiplicationDivision(int numberOne, int numberTwo) throws ArithmeticException {
+        double[] resultOperations = new double[4];
+        resultOperations[0] = (double) numberOne + numberTwo;
+        resultOperations[1] = (double) numberOne - numberTwo;
+        resultOperations[2] = (double) numberOne * numberTwo;
+        if (numberTwo == 0) {
+            throw new ArithmeticException("Деление на ноль");
+        } else {
+            resultOperations[3] = (double) numberOne / numberTwo;
+        }
+        return resultOperations;
     }
 
     public static void numbersComparison(int numberOne, int numberTwo) {
