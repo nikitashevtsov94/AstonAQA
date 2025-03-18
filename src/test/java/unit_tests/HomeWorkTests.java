@@ -1,7 +1,8 @@
 package unit_tests;
 
-import application.*;
-import org.junit.jupiter.api.Assertions;
+import application.InvalideTriangleException;
+import application.NumberComparator;
+import application.Triangle;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -11,22 +12,26 @@ import org.junit.jupiter.params.provider.MethodSource;
 import java.math.BigInteger;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static application.Factorial.calculateFactorial;
+import static application.CalculatorLite.*;
 
 class HomeWorkTests {
 
     @ParameterizedTest(name = "Тест проверка вычисления факториала числа из набора валидных данных {index} " +
             "для числа {1} равный {0}")
-    @MethodSource(value = "dataProviderForFactorial")
+    @MethodSource(value = "factorialDataProvider")
     @DisplayName("Тест для проверки расчета факториала числа")
     void testFactorialsPositive(int result, int param) {
-        Assertions.assertEquals(BigInteger.valueOf(result), Factorial.calculateFactorial(param),
+        assertEquals(BigInteger.valueOf(result), calculateFactorial(param),
                 String.format("Расчитанный факториал числа %d не соответствует ожиданиям", param));
     }
 
     @Test
     @DisplayName("Тест учета отсутствия возможности расчета факториала отрицательного числа")
     void testFactorialsNegative() {
-        Assertions.assertThrows(ArithmeticException.class, () -> Factorial.calculateFactorial(-1),
+        assertThrows(ArithmeticException.class, () -> calculateFactorial(-1),
                 "Нельзя вычислить факториал отрицательного числа");
     }
 
@@ -34,33 +39,33 @@ class HomeWorkTests {
     @DisplayName("Тест для проверки расчета площади треуольника")
     void testTriangle() {
         Triangle triangle = new Triangle(6, 5);
-        Assertions.assertEquals(15, triangle.calculateArea(6, 5),
+        assertEquals(15, triangle.calculateArea(6, 5),
                 "В расчете площади треугольника присутствует ошибка");
     }
 
     @ParameterizedTest(name = "Тест вычисления площади треугольника из набора негативных данных" +
             " {index} для длины стороны {1} и длины высоты {0}")
-    @MethodSource(value = "dataProviderForTriangleArea")
+    @MethodSource(value = "triangleAreaDataProvider")
     @DisplayName("Тест функции расчета площади треугольника с невалидными параметрами")
     void testTriangleAreaNegativeInoutData(double sideLength, double highLength) {
         Triangle triangle = new Triangle(sideLength, highLength);
-        Assertions.assertThrows(InvalideTriangleException.class, () -> triangle.calculateArea(sideLength, highLength),
+        assertThrows(InvalideTriangleException.class, () -> triangle.calculateArea(sideLength, highLength),
                 "Такой треугольник не существует");
     }
 
     @ParameterizedTest(name = "Тест {index} для проверки математических операций, " +
             "на вход подаются числа {4} и {5}. Сумма: {0}, разность: {1}, произведение {2}, частное: {3} ")
-    @MethodSource(value = "dataProviderForCalculationOperations")
+    @MethodSource(value = "calculationOperationsDataProvider")
     @DisplayName("Тест проверки расчета математических операций суммы, разности, произведения, частного")
     void calculationOperationsTest(int sum, int subtract, int mul, double div, int numberOne, int numberTwo) {
         assertAll(
-                () -> Assertions.assertEquals(sum, CalculatorLite.calculateSum(numberOne, numberTwo),
+                () -> assertEquals(sum, calculateSum(numberOne, numberTwo),
                         "Суммирование проведено некорректно"),
-                () -> Assertions.assertEquals(subtract, CalculatorLite.calculateSubtraction(numberOne, numberTwo),
+                () -> assertEquals(subtract, calculateSubtraction(numberOne, numberTwo),
                         "Вычитание проведено некорректно"),
-                () -> Assertions.assertEquals(mul, CalculatorLite.calculateMultiplication(numberOne, numberTwo),
+                () -> assertEquals(mul, calculateMultiplication(numberOne, numberTwo),
                         "Умножение произведено некорректно"),
-                () -> Assertions.assertEquals(div, CalculatorLite.calculateDivision(numberOne, numberTwo),
+                () -> assertEquals(div, calculateDivision(numberOne, numberTwo),
                         "Деление произведено некорректно")
         );
     }
@@ -68,7 +73,7 @@ class HomeWorkTests {
     @Test
     @DisplayName("Тест на запрет деления на ноль")
     void zeroDivisionDeniedTest() {
-        Assertions.assertThrows(ArithmeticException.class, () -> CalculatorLite.calculateDivision(1, 0),
+        assertThrows(ArithmeticException.class, () -> calculateDivision(1, 0),
                 "Попытка деления на ноль");
     }
 
@@ -82,10 +87,10 @@ class HomeWorkTests {
     })
     @DisplayName("Тест на корректное сравнение чисел")
     void searchingGreaterNumberTest(int numberOne, int numberTwo, String result) {
-        Assertions.assertEquals(result.trim(), NumberComparator.compareNumbers(numberOne, numberTwo).trim());
+        assertEquals(result.trim(), NumberComparator.compareNumbers(numberOne, numberTwo).trim());
     }
 
-    private static Object[][] dataProviderForFactorial() {
+    private static Object[][] factorialDataProvider() {
         return new Object[][]{
                 {1, 1},
                 {1, 0},
@@ -94,7 +99,7 @@ class HomeWorkTests {
         };
     }
 
-    private static Object[][] dataProviderForTriangleArea() {
+    private static Object[][] triangleAreaDataProvider() {
         return new Object[][]{
                 {0, 1},
                 {1, 0},
@@ -104,13 +109,11 @@ class HomeWorkTests {
         };
     }
 
-    private static Object[][] dataProviderForCalculationOperations() {
+    private static Object[][] calculationOperationsDataProvider() {
         return new Object[][]{
                 {1, -1, 0, 0.0, 0, 1},
                 {21, 7, 98, 2, 14, 7},
                 {-110, 90, 1000, 0.1, -10, -100}
         };
     }
-
-
 }
