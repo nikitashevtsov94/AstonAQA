@@ -7,7 +7,7 @@ public class NumberComparator {
         } else if (numberOne < numberTwo) {
             return String.format("Число %d меньше числа %d.%n", numberOne, numberTwo);
         } else {
-            return "Числа равны\n";
+            return "Числа равны.\n";
         }
     }
 }

@@ -16,8 +16,7 @@ public class CalculatorLite {
     public static double calculateDivision(int numberOne, int numberTwo) throws ArithmeticException {
         if (numberTwo == 0) {
             throw new ArithmeticException("Деление на ноль");
-        } else {
-            return (double) numberOne / numberTwo;
         }
+        return (double) numberOne / numberTwo;
     }
 }
