@@ -26,7 +26,7 @@ class SeleniumUsedTests {
     static By masterCardLocator = By.xpath("//img[@alt='MasterCard'and@xpath='1']");
     static By masterCardSecureCodeLocator = By.xpath("//img[@alt='MasterCard Secure Code']");
     static By belcardLocator = By.xpath("//img[@alt='Белкарт'and@xpath='1']");
-    //a[contains(text(),'Подробнее о сервисе')]
+
     @BeforeAll
     static void setUpChromeDriver() {
         WebDriverManager.chromedriver().setup();
@@ -69,8 +69,8 @@ class SeleniumUsedTests {
     @DisplayName("Тест наличия логотипов платежных систем")
     void logoPaymentSystemPresenceTest(By attributeValue) {
         try {
-            boolean presence = wait.until(ExpectedConditions.visibilityOfElementLocated(attributeValue)) != null;
-            Assertions.assertTrue(presence, "Лого не появилось");
+            boolean isLogoPresence = wait.until(ExpectedConditions.visibilityOfElementLocated(attributeValue)) != null;
+            Assertions.assertTrue(isLogoPresence, "Лого не появилось");
         } catch (TimeoutException e) {
             System.out.println("Отсутствует лого платежной системы: " + attributeValue);
         }
@@ -93,6 +93,34 @@ class SeleniumUsedTests {
                 "'Порядок оплаты и безопасность интернет платежей')]"));
         String metaContent = header.getAttribute("content");
         Assertions.assertEquals("Порядок оплаты и безопасность интернет платежей", metaContent);
+    }
+    //input[@id='connection-phone']
+    //input[@id='connection-sum']
+    //form[@id='pay-connection']//button[@type='submit'][contains(text(),'Продолжить')]
+    //div[@class='card ng-tns-c891095944-0'] FRAME
+    @Test
+    @DisplayName("Тест кнопки 'Continue'")
+    void buttonContinueTest() {
+        try {
+            WebElement numberTelephoneInputField = wait.until(ExpectedConditions.elementToBeClickable(
+                    By.xpath("//input[@id='connection-phone']")));
+            numberTelephoneInputField.click();
+            numberTelephoneInputField.sendKeys("297777777");
+            WebElement moneySumInputField = wait.until(ExpectedConditions.elementToBeClickable(
+                    By.xpath("//input[@id='connection-sum']")));
+            moneySumInputField.click();
+            moneySumInputField.sendKeys("10");
+            WebElement continuePayFormButton = wait.until(ExpectedConditions.elementToBeClickable(
+                    By.xpath("//form[@id='pay-connection']//button[@type='submit'][contains(text(),'Продолжить')]")));
+            continuePayFormButton.click();
+            wait.until(ExpectedConditions.frameToBeAvailableAndSwitchToIt(
+                    By.xpath("//iframe[@class='bepaid-iframe']")));
+            boolean isCardDataForm = wait.until(ExpectedConditions.visibilityOfElementLocated(
+                    By.xpath("//div[@class='card ng-tns-c891095944-0']"))) != null;
+            Assertions.assertTrue(isCardDataForm, "Переход на форму заполнения данных о карте не осуществлен");
+        } cath() {
+
+        }
     }
 
 }
