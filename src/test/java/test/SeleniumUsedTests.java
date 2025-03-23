@@ -36,10 +36,8 @@ class SeleniumUsedTests {
     private final By belCard = By.xpath("//div[@class='pay__partners']//img[@alt='Белкарт']");
     private final By payFormWrapper = By.className("pay__wrapper");
     private final By formHeader = By.xpath("//h2[normalize-space(.)='Онлайн пополнение без комиссии']");
-    private final By cookieForm = By.className("cookie__wrapper");
     private final By cookieAgreeButton = By.id("cookie-agree");
-    private final By serviceDetailsHyperText = By.partialLinkText("poryadok-oplaty-i-bezopasnost-internet-platezhey");
-    private final By securityAndPaymentInfoPageHeader = By.xpath("//title[normalize-space(.)='Порядок оплаты и безопасность интернет платежей']");
+    private final By serviceDetailsHyperText = By.xpath("//a[contains(text(),'Подробнее о сервисе')]");
     private final By phoneNumberInputField = By.id("connection-phone");
     private final By moneySumInputField = By.id("connection-sum");
     private final By continuePayFormButton = By.xpath("//form[@id='pay-connection']//button[@type='submit']");
@@ -60,14 +58,16 @@ class SeleniumUsedTests {
         wait = new WebDriverWait(driver, Duration.ofSeconds(WAIT_DURATION));
         driver.manage().window().maximize();
         driver.get(MTS_URL);
-        if (isCookiePresent()) {
-            wait.until(ExpectedConditions.elementToBeClickable((cookieAgreeButton))).click();
-        }
+        acceptCookie();
         wait.until(ExpectedConditions.visibilityOfElementLocated(payFormWrapper));
     }
 
-    private boolean isCookiePresent() {
-        return !driver.findElements(cookieForm).isEmpty();
+    private void acceptCookie() {
+        try {
+            wait.until(ExpectedConditions.elementToBeClickable((cookieAgreeButton))).click();
+        } catch (TimeoutException e) {
+            logger.info("Форма Cookie не появилась" + e.getMessage());
+        }
     }
 
     @AfterEach
@@ -107,7 +107,7 @@ class SeleniumUsedTests {
     @DisplayName("Тест на проверку ссылки 'Подробнее о сервисе'")
     void hyperTextTest() {
         wait.until(ExpectedConditions.elementToBeClickable(serviceDetailsHyperText)).click();
-        String metaContent = driver.findElement(securityAndPaymentInfoPageHeader).getDomAttribute("content");
+        String metaContent = driver.getTitle().trim();
         Assertions.assertEquals("Порядок оплаты и безопасность интернет платежей", metaContent);
     }
 
