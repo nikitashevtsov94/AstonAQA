@@ -1,38 +1,53 @@
 package test;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
-import org.junit.jupiter.api.*;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.MethodSource;
-import org.openqa.selenium.*;
+import org.apache.commons.lang3.StringUtils;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.openqa.selenium.By;
+import org.openqa.selenium.TimeoutException;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
 import java.util.Arrays;
-import java.util.List;
+import java.util.logging.Logger;
 
 
 class SeleniumUsedTests {
-    WebDriver driver;
-    WebDriverWait wait;
-    By payFormWrapper = By.xpath("//div[contains(@class, 'pay__wrapper')]");
-    By formHeader = By.xpath("//h2[normalize-space(.)='Онлайн пополнение без комиссии']");
-    By cookieAgreeButtonLocator = By.xpath("//button[contains(@id,'cookie-agree')]");
-    static By visaLogoLocator = By.xpath("//img[@alt='Visa']");
-    static By verifiedByVisaLocator = By.xpath("//img[@alt='Verified By Visa']");
-    static By masterCardLocator = By.xpath("//div[@class='pay__partners']//img[@alt='MasterCard']");
-    static By masterCardSecureCodeLocator = By.xpath("//img[@alt='MasterCard Secure Code']");
-    static By belcardLocator = By.xpath("//div[@class='pay__partners']//img[@alt='Белкарт']");
-    By serviceDetailsHyperText = By.xpath("//a[contains(text(),'Подробнее о сервисе')]");
-    By securityAndPaymentInfoPageHeader = By.xpath("//meta[contains(@content, " +
-            "'Порядок оплаты и безопасность интернет платежей')]");
-    By phoneNumberInputField = By.xpath("//input[@id='connection-phone']");
-    By moneySumInputField = By.xpath("//input[@id='connection-sum']");
-    By continuePayFormButton = By.xpath("//form[@id='pay-connection']//button[@type='submit'][contains(text(),'Продолжить')]");
-    By iFrame = By.xpath("//iframe[@class='bepaid-iframe']");
-    By creditCardDataForm = By.xpath("//div[@class='card ng-tns-c891095944-0']");
+
+    private static final String MTS_URL = "https://www.mts.by/";
+    private static final int WAIT_DURATION = 5;
+    private static final String TEST_PHONE_NUMBER = "297777777";
+    private static final String TEST_SUM = "10";
+    private final Logger logger = Logger.getLogger(SeleniumUsedTests.class.getName());
+
+    private final By visaLogo = By.xpath("//img[@alt='Visa']");
+    private final By verifiedByVisa = By.xpath("//img[@alt='Verified By Visa']");
+    private final By masterCard = By.xpath("//div[@class='pay__partners']//img[@alt='MasterCard']");
+    private final By masterCardSecureCode = By.xpath("//img[@alt='MasterCard Secure Code']");
+    private final By belCard = By.xpath("//div[@class='pay__partners']//img[@alt='Белкарт']");
+    private final By payFormWrapper = By.className("pay__wrapper");
+    private final By formHeader = By.xpath("//h2[normalize-space(.)='Онлайн пополнение без комиссии']");
+    private final By cookieForm = By.className("cookie__wrapper");
+    private final By cookieAgreeButton = By.id("cookie-agree");
+    private final By serviceDetailsHyperText = By.partialLinkText("poryadok-oplaty-i-bezopasnost-internet-platezhey");
+    private final By securityAndPaymentInfoPageHeader = By.xpath("//title[normalize-space(.)='Порядок оплаты и безопасность интернет платежей']");
+    private final By phoneNumberInputField = By.id("connection-phone");
+    private final By moneySumInputField = By.id("connection-sum");
+    private final By continuePayFormButton = By.xpath("//form[@id='pay-connection']//button[@type='submit']");
+    private final By iFrame = By.className("bepaid-iframe");
+    private final By creditCardDataForm = By.xpath("//div[contains(@class,'card ng-tns')]");
+
+    private WebDriver driver;
+    private WebDriverWait wait;
 
     @BeforeAll
     static void setUpChromeDriver() {
@@ -42,18 +57,17 @@ class SeleniumUsedTests {
     @BeforeEach
     void setUpDriverObject() {
         driver = new ChromeDriver();
-        wait = new WebDriverWait(driver, Duration.ofSeconds(5));
-        driver.get("https://www.mts.by/");
-        try {
-            wait.until(ExpectedConditions.elementToBeClickable((cookieAgreeButtonLocator))).click();
-        } catch (TimeoutException e) {
-            System.out.println("Форма Cookie не появилась" + e.getMessage());
+        wait = new WebDriverWait(driver, Duration.ofSeconds(WAIT_DURATION));
+        driver.manage().window().maximize();
+        driver.get(MTS_URL);
+        if (isCookiePresent()) {
+            wait.until(ExpectedConditions.elementToBeClickable((cookieAgreeButton))).click();
         }
-        try {
-            wait.until(ExpectedConditions.visibilityOfElementLocated(payFormWrapper));
-        } catch (TimeoutException e) {
-            System.out.println("Страница не загрузилась" + e.getMessage());
-        }
+        wait.until(ExpectedConditions.visibilityOfElementLocated(payFormWrapper));
+    }
+
+    private boolean isCookiePresent() {
+        return !driver.findElements(cookieForm).isEmpty();
     }
 
     @AfterEach
@@ -65,24 +79,28 @@ class SeleniumUsedTests {
     @DisplayName("Тест на соответствие названия блока «Онлайн пополнение без комиссии»")
     void OnlineReplenishmentWithoutCommissionHeaderTest() {
         WebElement header = driver.findElement(formHeader);
-        Assertions.assertEquals("Онлайн пополнение без комиссии", header.getText().replace("\n", " "));
+        Assertions.assertEquals("Онлайн пополнение без комиссии", header.getText().replace("\n", StringUtils.SPACE));
     }
 
-    @ParameterizedTest
-    @MethodSource(value = "dataProvider")
+    @Test
     @DisplayName("Тест наличия логотипов платежных систем")
-    void logoPaymentSystemPresenceTest(By attributeValue) {
-        try {
-            boolean isLogoPresence = wait.until(ExpectedConditions.visibilityOfElementLocated(attributeValue)) != null;
-            Assertions.assertTrue(isLogoPresence, "Лого не появилось");
-        } catch (TimeoutException e) {
-            System.out.println("Отсутствует лого платежной системы: " + attributeValue);
-        }
+    void logoPaymentSystemPresenceTest() {
+        Arrays.asList(visaLogo, verifiedByVisa, masterCard,
+                masterCardSecureCode, belCard).forEach(
+                locator -> {
+                    boolean isLogoPresence = isLogoPresent(locator);
+                    Assertions.assertAll(() ->
+                            Assertions.assertTrue(isLogoPresence, String.format("Лого %s не появилось", locator)));
+                });
     }
 
-    static List<By> dataProvider() {
-        return Arrays.asList(visaLogoLocator, verifiedByVisaLocator, masterCardLocator,
-                masterCardSecureCodeLocator, belcardLocator);
+    private boolean isLogoPresent(By locator) {
+        try {
+            wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
+        } catch (TimeoutException e) {
+            return false;
+        }
+        return true;
     }
 
     @Test
@@ -98,18 +116,16 @@ class SeleniumUsedTests {
     void buttonContinueTest() {
         WebElement phoneNumberField = wait.until(ExpectedConditions.elementToBeClickable(phoneNumberInputField));
         phoneNumberField.click();
-        phoneNumberField.sendKeys("297777777");
+        phoneNumberField.sendKeys(TEST_PHONE_NUMBER);
         WebElement moneySumField = wait.until(ExpectedConditions.elementToBeClickable(
                 moneySumInputField));
         moneySumField.click();
-        moneySumField.sendKeys("10");
+        moneySumField.sendKeys(TEST_SUM);
         wait.until(ExpectedConditions.elementToBeClickable(continuePayFormButton)).click();
-        System.out.println("Нажата кнопка продолжить на форме пополнения счета");
+        logger.info("Нажата кнопка продолжить на форме пополнения счета");
         wait.until(ExpectedConditions.frameToBeAvailableAndSwitchToIt(iFrame));
         boolean isCardDataForm = wait.until(ExpectedConditions.visibilityOfElementLocated(creditCardDataForm)) != null;
         Assertions.assertTrue(isCardDataForm, "Переход на форму заполнения данных о карте не осуществлен");
-        System.out.println("Форма заполнения данных банковской карты получена");
+        logger.info("Форма заполнения данных банковской карты получена");
     }
 }
-
-
