@@ -16,72 +16,71 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import pages.BasePage;
+import pages.CookieWindowPage;
+import pages.OnlineReplenishmentWithoutCommissionForm;
 
 import java.time.Duration;
 import java.util.Arrays;
 import java.util.logging.Logger;
 
-public class homeWork16Test {
+public class HomeWork16Test {
 
+//    private static final String MTS_URL = "https://www.mts.by/";
+//    private static final int WAIT_DURATION = 5;
+//    private static final String TEST_PHONE_NUMBER = "297777777";
+//    private static final String TEST_SUM = "10";
+    private final Logger logger = Logger.getLogger(HomeWork16Test.class.getName());
 
-    private static final String MTS_URL = "https://www.mts.by/";
-    private static final int WAIT_DURATION = 5;
-    private static final String TEST_PHONE_NUMBER = "297777777";
-    private static final String TEST_SUM = "10";
-    private final Logger logger = Logger.getLogger(homeWork16Test.class.getName());
+//    private final By visaLogo = By.xpath("//img[@alt='Visa']");
+//    private final By verifiedByVisa = By.xpath("//img[@alt='Verified By Visa']");
+//    private final By masterCard = By.xpath("//div[@class='pay__partners']//img[@alt='MasterCard']");
+//    private final By masterCardSecureCode = By.xpath("//img[@alt='MasterCard Secure Code']");
+//    private final By belCard = By.xpath("//div[@class='pay__partners']//img[@alt='Белкарт']");
+//    private final By formHeader = By.xpath("//h2[normalize-space(.)='Онлайн пополнение без комиссии']");
 
-    private final By visaLogo = By.xpath("//img[@alt='Visa']");
-    private final By verifiedByVisa = By.xpath("//img[@alt='Verified By Visa']");
-    private final By masterCard = By.xpath("//div[@class='pay__partners']//img[@alt='MasterCard']");
-    private final By masterCardSecureCode = By.xpath("//img[@alt='MasterCard Secure Code']");
-    private final By belCard = By.xpath("//div[@class='pay__partners']//img[@alt='Белкарт']");
-    private final By payFormWrapper = By.className("pay__wrapper");
-    private final By formHeader = By.xpath("//h2[normalize-space(.)='Онлайн пополнение без комиссии']");
-    private final By cookieAgreeButton = By.id("cookie-agree");
-    private final By serviceDetailsHyperText = By.xpath("//a[contains(text(),'Подробнее о сервисе')]");
-    private final By phoneNumberInputField = By.id("connection-phone");
-    private final By moneySumInputField = By.id("connection-sum");
-    private final By continuePayFormButton = By.xpath("//form[@id='pay-connection']//button[@type='submit']");
-    private final By iFrame = By.className("bepaid-iframe");
-    private final By creditCardDataForm = By.xpath("//div[contains(@class,'card ng-tns')]");
+//    private final By serviceDetailsHyperText = By.xpath("//a[contains(text(),'Подробнее о сервисе')]");
+//    private final By phoneNumberInputField = By.id("connection-phone");
+//    private final By moneySumInputField = By.id("connection-sum");
+//    private final By continuePayFormButton = By.xpath("//form[@id='pay-connection']//button[@type='submit']");
+//    private final By iFrame = By.className("bepaid-iframe");
+//    private final By creditCardDataForm = By.xpath("//div[contains(@class,'card ng-tns')]");
 
-    private WebDriver driver;
-    private WebDriverWait wait;
+    private static BasePage mtsMain;
+    private static CookieWindowPage cookieForm;
+    private static final WebDriver driver = new ChromeDriver();
+    private static OnlineReplenishmentWithoutCommissionForm orcForm;
 
     @BeforeAll
     static void setUpChromeDriver() {
-//        WebDriverManager.chromedriver().setup();
-        BasePage mtsMain = new BasePage();
+        WebDriverManager.chromedriver().setup();
+        mtsMain = new BasePage(driver);
+        cookieForm = new CookieWindowPage(driver);
     }
 
     @BeforeEach
     void setUpDriverObject() {
-        driver = new ChromeDriver();
-        wait = new WebDriverWait(driver, Duration.ofSeconds(WAIT_DURATION));
-        driver.manage().window().maximize();
-        driver.get(MTS_URL);
-        acceptCookie();
-        wait.until(ExpectedConditions.visibilityOfElementLocated(payFormWrapper));
-    }
+        mtsMain.loadBaseUrl();
+        cookieForm.acceptCookie();
+        mtsMain.checkPayFormLoaded();
 
-    private void acceptCookie() {
-        try {
-            wait.until(ExpectedConditions.elementToBeClickable((cookieAgreeButton))).click();
-        } catch (TimeoutException e) {
-            logger.info("Форма Cookie не появилась" + e.getMessage());
-        }
+
+//        driver = new ChromeDriver();
+//        wait = new WebDriverWait(driver, Duration.ofSeconds(WAIT_DURATION));
+//        driver.manage().window().maximize();
+//        driver.get(MTS_URL);
+//        acceptCookie();
+//        wait.until(ExpectedConditions.visibilityOfElementLocated(payFormWrapper));
     }
 
     @AfterEach
     void tearsDown() {
-        driver.quit();
+        mtsMain.closeBrowser();
     }
 
     @Test
     @DisplayName("Тест на соответствие названия блока «Онлайн пополнение без комиссии»")
     void OnlineReplenishmentWithoutCommissionHeaderTest() {
-        WebElement header = driver.findElement(formHeader);
-        Assertions.assertEquals("Онлайн пополнение без комиссии", header.getText().replace("\n", StringUtils.SPACE));
+        Assertions.assertEquals("Онлайн пополнение без комиссии", orcForm.getOrcFormHeader());
     }
 
     @Test
