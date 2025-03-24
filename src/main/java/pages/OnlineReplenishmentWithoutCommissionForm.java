@@ -2,8 +2,13 @@ package pages;
 
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.By;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+
+import java.lang.reflect.Array;
+import java.util.Arrays;
+import java.util.List;
 
 public class OnlineReplenishmentWithoutCommissionForm extends BasePage {
     private final By formHeader = By.xpath("//h2[normalize-space(.)='Онлайн пополнение без комиссии']");
@@ -20,8 +25,23 @@ public class OnlineReplenishmentWithoutCommissionForm extends BasePage {
     public OnlineReplenishmentWithoutCommissionForm(WebDriver driver) {
         super(driver);
     }
+
     public String getOrcFormHeader() {
         return wait.until(ExpectedConditions.visibilityOfElementLocated(formHeader))
                 .getText().replace("\n", StringUtils.SPACE);
     }
+
+    public boolean isLogoPresent(By locator) {
+        try {
+            wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
+        } catch (TimeoutException e) {
+            return false;
+        }
+        return true;
+    }
+
+    public List<By> getPaymentsLogo() {
+        return Arrays.asList(visaLogo, verifiedByVisa, masterCard, masterCardSecureCode, belCard);
+    }
+
 }

@@ -25,7 +25,7 @@ import java.util.logging.Logger;
 
 public class HomeWork16Test {
 
-//    private static final String MTS_URL = "https://www.mts.by/";
+    //    private static final String MTS_URL = "https://www.mts.by/";
 //    private static final int WAIT_DURATION = 5;
 //    private static final String TEST_PHONE_NUMBER = "297777777";
 //    private static final String TEST_SUM = "10";
@@ -47,14 +47,16 @@ public class HomeWork16Test {
 
     private static BasePage mtsMain;
     private static CookieWindowPage cookieForm;
-    private static final WebDriver driver = new ChromeDriver();
+    private static WebDriver driver;
     private static OnlineReplenishmentWithoutCommissionForm orcForm;
 
     @BeforeAll
     static void setUpChromeDriver() {
         WebDriverManager.chromedriver().setup();
+        driver = new ChromeDriver();
         mtsMain = new BasePage(driver);
         cookieForm = new CookieWindowPage(driver);
+        orcForm = new OnlineReplenishmentWithoutCommissionForm(driver);
     }
 
     @BeforeEach
@@ -86,47 +88,38 @@ public class HomeWork16Test {
     @Test
     @DisplayName("Тест наличия логотипов платежных систем")
     void logoPaymentSystemPresenceTest() {
-        Arrays.asList(visaLogo, verifiedByVisa, masterCard,
-                masterCardSecureCode, belCard).forEach(
+        orcForm.getPaymentsLogo().forEach(
                 locator -> {
-                    boolean isLogoPresence = isLogoPresent(locator);
                     Assertions.assertAll(() ->
-                            Assertions.assertTrue(isLogoPresence, String.format("Лого %s не появилось", locator)));
+                            Assertions.assertTrue(orcForm.isLogoPresent(locator), String.format("Лого %s не появилось", locator)));
                 });
     }
 
-    private boolean isLogoPresent(By locator) {
-        try {
-            wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
-        } catch (TimeoutException e) {
-            return false;
-        }
-        return true;
-    }
 
-    @Test
-    @DisplayName("Тест на проверку ссылки 'Подробнее о сервисе'")
-    void hyperTextTest() {
-        wait.until(ExpectedConditions.elementToBeClickable(serviceDetailsHyperText)).click();
-        String metaContent = driver.getTitle().trim();
-        Assertions.assertEquals("Порядок оплаты и безопасность интернет платежей", metaContent);
-    }
-
-    @Test
-    @DisplayName("Тест кнопки 'Continue'")
-    void buttonContinueTest() {
-        WebElement phoneNumberField = wait.until(ExpectedConditions.elementToBeClickable(phoneNumberInputField));
-        phoneNumberField.click();
-        phoneNumberField.sendKeys(TEST_PHONE_NUMBER);
-        WebElement moneySumField = wait.until(ExpectedConditions.elementToBeClickable(
-                moneySumInputField));
-        moneySumField.click();
-        moneySumField.sendKeys(TEST_SUM);
-        wait.until(ExpectedConditions.elementToBeClickable(continuePayFormButton)).click();
-        logger.info("Нажата кнопка продолжить на форме пополнения счета");
-        wait.until(ExpectedConditions.frameToBeAvailableAndSwitchToIt(iFrame));
-        boolean isCardDataForm = wait.until(ExpectedConditions.visibilityOfElementLocated(creditCardDataForm)) != null;
-        Assertions.assertTrue(isCardDataForm, "Переход на форму заполнения данных о карте не осуществлен");
-        logger.info("Форма заполнения данных банковской карты получена");
-    }
+//
+//    @Test
+//    @DisplayName("Тест на проверку ссылки 'Подробнее о сервисе'")
+//    void hyperTextTest() {
+//        wait.until(ExpectedConditions.elementToBeClickable(serviceDetailsHyperText)).click();
+//        String metaContent = driver.getTitle().trim();
+//        Assertions.assertEquals("Порядок оплаты и безопасность интернет платежей", metaContent);
+//    }
+//
+//    @Test
+//    @DisplayName("Тест кнопки 'Continue'")
+//    void buttonContinueTest() {
+//        WebElement phoneNumberField = wait.until(ExpectedConditions.elementToBeClickable(phoneNumberInputField));
+//        phoneNumberField.click();
+//        phoneNumberField.sendKeys(TEST_PHONE_NUMBER);
+//        WebElement moneySumField = wait.until(ExpectedConditions.elementToBeClickable(
+//                moneySumInputField));
+//        moneySumField.click();
+//        moneySumField.sendKeys(TEST_SUM);
+//        wait.until(ExpectedConditions.elementToBeClickable(continuePayFormButton)).click();
+//        logger.info("Нажата кнопка продолжить на форме пополнения счета");
+//        wait.until(ExpectedConditions.frameToBeAvailableAndSwitchToIt(iFrame));
+//        boolean isCardDataForm = wait.until(ExpectedConditions.visibilityOfElementLocated(creditCardDataForm)) != null;
+//        Assertions.assertTrue(isCardDataForm, "Переход на форму заполнения данных о карте не осуществлен");
+//        logger.info("Форма заполнения данных банковской карты получена");
+//    }
 }

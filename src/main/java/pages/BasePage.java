@@ -28,6 +28,7 @@ public class BasePage {
     }
 
     public void loadBaseUrl() {
+        driver.manage().window().maximize();
         driver.get(MTS_URL);
         try {
             wait.until(ExpectedConditions.titleIs(BASE_URL_HEADER));
