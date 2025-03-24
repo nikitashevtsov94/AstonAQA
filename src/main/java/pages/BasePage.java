@@ -19,7 +19,7 @@ public class BasePage {
     private static final String BASE_URL_HEADER = "МТС – мобильный оператор в Беларуси";
     private final Logger logger = Logger.getLogger(BasePage.class.getName());
 
-    private final WebDriver driver;
+    protected final WebDriver driver;
     protected final WebDriverWait wait;
 
     public BasePage(WebDriver driver) {

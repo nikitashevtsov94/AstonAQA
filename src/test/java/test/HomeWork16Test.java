@@ -2,6 +2,7 @@ package test;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.apache.commons.lang3.StringUtils;
+import org.checkerframework.checker.units.qual.A;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -17,6 +18,8 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import pages.BasePage;
 import pages.CookieWindowPage;
+import pages.DetailsAboutServicePage;
+import pages.IFramePaymentPage;
 import pages.OnlineReplenishmentWithoutCommissionForm;
 
 import java.time.Duration;
@@ -47,16 +50,20 @@ public class HomeWork16Test {
 
     private static BasePage mtsMain;
     private static CookieWindowPage cookieForm;
-    private static WebDriver driver;
     private static OnlineReplenishmentWithoutCommissionForm orcForm;
+    private static DetailsAboutServicePage dasPage;
+    private static IFramePaymentPage iFramePaymentPage;
 
     @BeforeAll
     static void setUpChromeDriver() {
         WebDriverManager.chromedriver().setup();
-        driver = new ChromeDriver();
+        WebDriver driver = new ChromeDriver();
         mtsMain = new BasePage(driver);
         cookieForm = new CookieWindowPage(driver);
         orcForm = new OnlineReplenishmentWithoutCommissionForm(driver);
+        dasPage = new DetailsAboutServicePage(driver);
+        iFramePaymentPage = new IFramePaymentPage(driver);
+
     }
 
     @BeforeEach
@@ -95,31 +102,24 @@ public class HomeWork16Test {
                 });
     }
 
+    @Test
+    @DisplayName("Тест на проверку ссылки 'Подробнее о сервисе'")
+    void hyperTextTest() {
+        orcForm.detailsHyperTextClick();
+        Assertions.assertEquals("Порядок оплаты и безопасность интернет платежей", dasPage.getPageHeader());
+    }
 
-//
-//    @Test
-//    @DisplayName("Тест на проверку ссылки 'Подробнее о сервисе'")
-//    void hyperTextTest() {
-//        wait.until(ExpectedConditions.elementToBeClickable(serviceDetailsHyperText)).click();
-//        String metaContent = driver.getTitle().trim();
-//        Assertions.assertEquals("Порядок оплаты и безопасность интернет платежей", metaContent);
-//    }
-//
-//    @Test
-//    @DisplayName("Тест кнопки 'Continue'")
-//    void buttonContinueTest() {
-//        WebElement phoneNumberField = wait.until(ExpectedConditions.elementToBeClickable(phoneNumberInputField));
-//        phoneNumberField.click();
-//        phoneNumberField.sendKeys(TEST_PHONE_NUMBER);
-//        WebElement moneySumField = wait.until(ExpectedConditions.elementToBeClickable(
-//                moneySumInputField));
-//        moneySumField.click();
-//        moneySumField.sendKeys(TEST_SUM);
-//        wait.until(ExpectedConditions.elementToBeClickable(continuePayFormButton)).click();
-//        logger.info("Нажата кнопка продолжить на форме пополнения счета");
-//        wait.until(ExpectedConditions.frameToBeAvailableAndSwitchToIt(iFrame));
-//        boolean isCardDataForm = wait.until(ExpectedConditions.visibilityOfElementLocated(creditCardDataForm)) != null;
-//        Assertions.assertTrue(isCardDataForm, "Переход на форму заполнения данных о карте не осуществлен");
-//        logger.info("Форма заполнения данных банковской карты получена");
-//    }
+    @Test
+    @DisplayName("Тест кнопки 'Продолжить' при пополнении Услуг связи")
+    void buttonContinueTest() {
+        Assertions.assertEquals("Услуги связи", orcForm.getActualPaymentSection(),
+                "Раздел оплаты не соответствует проверяемому");
+        logger.info("Выбран верный раздел оплаты");
+
+        orcForm.fillCommunicationServicesDataSection(10);
+        iFramePaymentPage.switchToIFrame();
+        Assertions.assertTrue(iFramePaymentPage.isCardDataFormAvailable(),
+                "Переход на форму заполнения данных о карте не осуществлен");
+        logger.info("Форма заполнения данных банковской карты получена");
+    }
 }
