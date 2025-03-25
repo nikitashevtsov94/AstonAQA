@@ -3,12 +3,7 @@ package test;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.apache.commons.lang3.StringUtils;
 import org.checkerframework.checker.units.qual.A;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -127,7 +122,8 @@ public class HomeWork16Test {
 
     @Test()
     @DisplayName("Проверка плейсхолдеров для типа оплаты \"Услуги связи\"")
-    void Test() {
+    void placeHolderCommunicationServicesTest() {
+        orcForm.selectCommunicationServicesPaymentType();
         Assertions.assertEquals("Услуги связи", orcForm.getActualPaymentSection(),
                 "Раздел оплаты не соответствует проверяемому");
         Assertions.assertAll(
@@ -146,21 +142,72 @@ public class HomeWork16Test {
 
     @Test()
     @DisplayName("Проверка плейсхолдеров для типа оплаты \"Домашний интернет\"")
-    void Test() {
+    void placeHolderHomeInternetTest() {
+        orcForm.selectHomeInternetPaymentType();
         Assertions.assertEquals("Домашний интернет", orcForm.getActualPaymentSection(),
                 "Раздел оплаты не соответствует проверяемому");
         Assertions.assertAll(
-                () -> Assertions.assertEquals("Номер телефона",
-                        orcForm.getPhoneNumberPlaceHolderCommunicationServices(),
+                () -> Assertions.assertEquals("Номер абонента",
+                        orcForm.getSubscriberPhoneNumberInputFieldPlaceHolderHomeInternet(),
                         "Маски ввода не совпадают с ожидаемым значением"),
                 () -> Assertions.assertEquals("Сумма",
-                        orcForm.getMoneySumInputFieldPlaceHolderCommunicationServices(),
+                        orcForm.getMoneySumInputFieldPlaceHolderHomeInternet(),
                         "Маски ввода не совпадают с ожидаемым значением"),
                 () -> Assertions.assertEquals("E-mail для отправки чека",
-                        orcForm.getEmailInputFieldPlaceHolderCommunicationServices(),
+                        orcForm.getEmailInputFieldPlaceHolderHomeInternet(),
                         "Маски ввода не совпадают с ожидаемым значением")
         );
-
     }
 
+    @Test()
+    @DisplayName("Проверка плейсхолдеров для типа оплаты \"Рассрочка\"")
+    void placeHolderInstallmentPlanTest() {
+        orcForm.selectInstallmentPlanPaymentType();
+        Assertions.assertEquals("Рассрочка", orcForm.getActualPaymentSection(),
+                "Раздел оплаты не соответствует проверяемому");
+        Assertions.assertAll(
+                () -> Assertions.assertEquals("Номер счета на 44",
+                        orcForm.getAccountNumberInputFieldPlaceHolderInstallmentPlan(),
+                        "Маски ввода не совпадают с ожидаемым значением"),
+                () -> Assertions.assertEquals("Сумма",
+                        orcForm.getMoneySumInputFieldPlaceHolderInstallmentPlan(),
+                        "Маски ввода не совпадают с ожидаемым значением"),
+                () -> Assertions.assertEquals("E-mail для отправки чека",
+                        orcForm.getEmailInputFieldPlaceHolderInstallmentPlan(),
+                        "Маски ввода не совпадают с ожидаемым значением")
+        );
+    }
+
+    @Test()
+    @DisplayName("Проверка плейсхолдеров для типа оплаты \"Задолженность\"")
+    void placeHolderDebtTest() {
+        orcForm.selectDebtPaymentType();
+        Assertions.assertEquals("Задолженность", orcForm.getActualPaymentSection(),
+                "Раздел оплаты не соответствует проверяемому");
+        Assertions.assertAll(
+                () -> Assertions.assertEquals("Номер счета на 2073",
+                        orcForm.getAccountNumberInputFieldPlaceHolderDebt(),
+                        "Маски ввода не совпадают с ожидаемым значением"),
+                () -> Assertions.assertEquals("Сумма",
+                        orcForm.getMoneySumInputFieldPlaceHolderDebt(),
+                        "Маски ввода не совпадают с ожидаемым значением"),
+                () -> Assertions.assertEquals("E-mail для отправки чека",
+                        orcForm.getEmailInputFieldPlaceHolderDebt(),
+                        "Маски ввода не совпадают с ожидаемым значением")
+        );
+    }
+
+    @Test
+    @DisplayName("Тест ")
+    void test() {
+        orcForm.selectCommunicationServicesPaymentType();
+        Assertions.assertEquals("Услуги связи", orcForm.getActualPaymentSection(),
+                "Раздел оплаты не соответствует проверяемому");
+        logger.info("Выбран верный раздел оплаты");
+        orcForm.fillCommunicationServicesDataSection(10);
+        iFramePaymentPage.switchToIFrame();
+        logger.info("Переход на форму заполнения данных о карте");
+        Assertions.assertTrue(iFramePaymentPage.hasMaestroLogo());
+        logger.info("Форма заполнения данных банковской карты получена");
+    }
 }
