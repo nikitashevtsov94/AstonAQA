@@ -42,7 +42,6 @@ public class OnlineReplenishmentWithoutCommissionForm extends BasePage {
     private final Logger logger = Logger.getLogger(OnlineReplenishmentWithoutCommissionForm.class.getName());
 
     private static final String TEST_PHONE_NUMBER = "297777777";
-    private static final String TEST_SUM = "10";
 
     public OnlineReplenishmentWithoutCommissionForm(WebDriver driver) {
         super(driver);
@@ -50,17 +49,6 @@ public class OnlineReplenishmentWithoutCommissionForm extends BasePage {
 
     public String getOrcFormHeader() {
         return wait.until(ExpectedConditions.visibilityOfElementLocated(formHeader)).getText().replace("\n", StringUtils.SPACE);
-    }
-
-    public boolean isLogoPresent(By locator) {
-        try {
-            wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
-            logger.info(String.format("Логотип %s отображается на странице", locator));
-        } catch (TimeoutException e) {
-            logger.info("Найден логотип" + locator);
-            return false;
-        }
-        return true;
     }
 
     public List<By> getPaymentsLogo() {
@@ -109,7 +97,7 @@ public class OnlineReplenishmentWithoutCommissionForm extends BasePage {
         logger.info("Вырбран тип оплаты \" Задолженность\"");
     }
 
-    public void fillCommunicationServicesDataSection(int sum) {
+    public void fillAndAcceptCommunicationServicesDataSection(int sum) {
         typePhoneNumber();
         typePaymentSum(sum);
         clickContinueButtonCommunicationServices();

@@ -1,56 +1,34 @@
 package test;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
-import org.apache.commons.lang3.StringUtils;
-import org.checkerframework.checker.units.qual.A;
-import org.junit.jupiter.api.*;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.CsvSource;
-import org.junit.jupiter.params.provider.ValueSource;
-import org.openqa.selenium.By;
-import org.openqa.selenium.TimeoutException;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import pages.BasePage;
 import pages.CookieWindowPage;
 import pages.DetailsAboutServicePage;
 import pages.IFramePaymentPage;
 import pages.OnlineReplenishmentWithoutCommissionForm;
 
-import java.time.Duration;
-import java.util.Arrays;
 import java.util.logging.Logger;
 
-public class HomeWork16Test {
+class HomeWork16Test {
 
-    //    private static final String MTS_URL = "https://www.mts.by/";
-//    private static final int WAIT_DURATION = 5;
-//    private static final String TEST_PHONE_NUMBER = "297777777";
-//    private static final String TEST_SUM = "10";
-    private final Logger logger = Logger.getLogger(HomeWork16Test.class.getName());
-
-//    private final By visaLogo = By.xpath("//img[@alt='Visa']");
-//    private final By verifiedByVisa = By.xpath("//img[@alt='Verified By Visa']");
-//    private final By masterCard = By.xpath("//div[@class='pay__partners']//img[@alt='MasterCard']");
-//    private final By masterCardSecureCode = By.xpath("//img[@alt='MasterCard Secure Code']");
-//    private final By belCard = By.xpath("//div[@class='pay__partners']//img[@alt='Белкарт']");
-//    private final By formHeader = By.xpath("//h2[normalize-space(.)='Онлайн пополнение без комиссии']");
-
-//    private final By serviceDetailsHyperText = By.xpath("//a[contains(text(),'Подробнее о сервисе')]");
-//    private final By phoneNumberInputField = By.id("connection-phone");
-//    private final By moneySumInputField = By.id("connection-sum");
-//    private final By continuePayFormButton = By.xpath("//form[@id='pay-connection']//button[@type='submit']");
-//    private final By iFrame = By.className("bepaid-iframe");
-//    private final By creditCardDataForm = By.xpath("//div[contains(@class,'card ng-tns')]");
+    private static final String TEST_PHONE_NUMBER = "297777777";
+    private static final String TEST_SUM = "10.00";
 
     private static BasePage mtsMain;
     private static CookieWindowPage cookieForm;
     private static OnlineReplenishmentWithoutCommissionForm orcForm;
     private static DetailsAboutServicePage dasPage;
     private static IFramePaymentPage iFramePaymentPage;
+
+    private final Logger logger = Logger.getLogger(HomeWork16Test.class.getName());
 
     @BeforeAll
     static void setUpChromeDriver() {
@@ -61,7 +39,6 @@ public class HomeWork16Test {
         orcForm = new OnlineReplenishmentWithoutCommissionForm(driver);
         dasPage = new DetailsAboutServicePage(driver);
         iFramePaymentPage = new IFramePaymentPage(driver);
-
     }
 
     @BeforeEach
@@ -69,14 +46,6 @@ public class HomeWork16Test {
         mtsMain.loadBaseUrl();
         cookieForm.acceptCookie();
         mtsMain.checkPayFormLoaded();
-
-
-//        driver = new ChromeDriver();
-//        wait = new WebDriverWait(driver, Duration.ofSeconds(WAIT_DURATION));
-//        driver.manage().window().maximize();
-//        driver.get(MTS_URL);
-//        acceptCookie();
-//        wait.until(ExpectedConditions.visibilityOfElementLocated(payFormWrapper));
     }
 
     @AfterEach
@@ -96,7 +65,8 @@ public class HomeWork16Test {
         orcForm.getPaymentsLogo().forEach(
                 locator -> {
                     Assertions.assertAll(() ->
-                            Assertions.assertTrue(orcForm.isLogoPresent(locator), String.format("Лого %s не появилось", locator)));
+                            Assertions.assertTrue(orcForm.isLogoPresent(locator),
+                                    String.format("Лого %s не появилось", locator)));
                 });
     }
 
@@ -113,7 +83,8 @@ public class HomeWork16Test {
         Assertions.assertEquals("Услуги связи", orcForm.getActualPaymentSection(),
                 "Раздел оплаты не соответствует проверяемому");
         logger.info("Выбран верный раздел оплаты");
-        orcForm.fillCommunicationServicesDataSection(10);
+        orcForm.fillAndAcceptCommunicationServicesDataSection(10);
+        logger.info("Переход на форму заполнения данных о карте");
         iFramePaymentPage.switchToIFrame();
         Assertions.assertTrue(iFramePaymentPage.isCardDataFormAvailable(),
                 "Переход на форму заполнения данных о карте не осуществлен");
@@ -121,7 +92,7 @@ public class HomeWork16Test {
     }
 
     @Test()
-    @DisplayName("Проверка плейсхолдеров для типа оплаты \"Услуги связи\"")
+    @DisplayName("Проверка масок ввода для типа оплаты \"Услуги связи\"")
     void placeHolderCommunicationServicesTest() {
         orcForm.selectCommunicationServicesPaymentType();
         Assertions.assertEquals("Услуги связи", orcForm.getActualPaymentSection(),
@@ -129,19 +100,19 @@ public class HomeWork16Test {
         Assertions.assertAll(
                 () -> Assertions.assertEquals("Номер телефона",
                         orcForm.getPhoneNumberPlaceHolderCommunicationServices(),
-                        "Маски ввода не совпадают с ожидаемым значением"),
+                        "Маска ввода не совпадают с ожидаемым значением"),
                 () -> Assertions.assertEquals("Сумма",
-                orcForm.getMoneySumInputFieldPlaceHolderCommunicationServices(),
-                "Маски ввода не совпадают с ожидаемым значением"),
+                        orcForm.getMoneySumInputFieldPlaceHolderCommunicationServices(),
+                        "Маска ввода не совпадают с ожидаемым значением"),
                 () -> Assertions.assertEquals("E-mail для отправки чека",
                         orcForm.getEmailInputFieldPlaceHolderCommunicationServices(),
-                        "Маски ввода не совпадают с ожидаемым значением")
+                        "Маска ввода не совпадают с ожидаемым значением")
         );
 
     }
 
     @Test()
-    @DisplayName("Проверка плейсхолдеров для типа оплаты \"Домашний интернет\"")
+    @DisplayName("Проверка масок ввода для типа оплаты \"Домашний интернет\"")
     void placeHolderHomeInternetTest() {
         orcForm.selectHomeInternetPaymentType();
         Assertions.assertEquals("Домашний интернет", orcForm.getActualPaymentSection(),
@@ -149,18 +120,18 @@ public class HomeWork16Test {
         Assertions.assertAll(
                 () -> Assertions.assertEquals("Номер абонента",
                         orcForm.getSubscriberPhoneNumberInputFieldPlaceHolderHomeInternet(),
-                        "Маски ввода не совпадают с ожидаемым значением"),
+                        "Маска ввода не совпадают с ожидаемым значением"),
                 () -> Assertions.assertEquals("Сумма",
                         orcForm.getMoneySumInputFieldPlaceHolderHomeInternet(),
-                        "Маски ввода не совпадают с ожидаемым значением"),
+                        "Маска ввода не совпадают с ожидаемым значением"),
                 () -> Assertions.assertEquals("E-mail для отправки чека",
                         orcForm.getEmailInputFieldPlaceHolderHomeInternet(),
-                        "Маски ввода не совпадают с ожидаемым значением")
+                        "Маска ввода не совпадают с ожидаемым значением")
         );
     }
 
     @Test()
-    @DisplayName("Проверка плейсхолдеров для типа оплаты \"Рассрочка\"")
+    @DisplayName("Проверка масок ввода для типа оплаты \"Рассрочка\"")
     void placeHolderInstallmentPlanTest() {
         orcForm.selectInstallmentPlanPaymentType();
         Assertions.assertEquals("Рассрочка", orcForm.getActualPaymentSection(),
@@ -168,18 +139,18 @@ public class HomeWork16Test {
         Assertions.assertAll(
                 () -> Assertions.assertEquals("Номер счета на 44",
                         orcForm.getAccountNumberInputFieldPlaceHolderInstallmentPlan(),
-                        "Маски ввода не совпадают с ожидаемым значением"),
+                        "Маска ввода не совпадают с ожидаемым значением"),
                 () -> Assertions.assertEquals("Сумма",
                         orcForm.getMoneySumInputFieldPlaceHolderInstallmentPlan(),
-                        "Маски ввода не совпадают с ожидаемым значением"),
+                        "Маска ввода не совпадают с ожидаемым значением"),
                 () -> Assertions.assertEquals("E-mail для отправки чека",
                         orcForm.getEmailInputFieldPlaceHolderInstallmentPlan(),
-                        "Маски ввода не совпадают с ожидаемым значением")
+                        "Маска ввода не совпадают с ожидаемым значением")
         );
     }
 
     @Test()
-    @DisplayName("Проверка плейсхолдеров для типа оплаты \"Задолженность\"")
+    @DisplayName("Проверка масок ввода для типа оплаты \"Задолженность\"")
     void placeHolderDebtTest() {
         orcForm.selectDebtPaymentType();
         Assertions.assertEquals("Задолженность", orcForm.getActualPaymentSection(),
@@ -187,27 +158,65 @@ public class HomeWork16Test {
         Assertions.assertAll(
                 () -> Assertions.assertEquals("Номер счета на 2073",
                         orcForm.getAccountNumberInputFieldPlaceHolderDebt(),
-                        "Маски ввода не совпадают с ожидаемым значением"),
+                        "Маска ввода не совпадают с ожидаемым значением"),
                 () -> Assertions.assertEquals("Сумма",
                         orcForm.getMoneySumInputFieldPlaceHolderDebt(),
-                        "Маски ввода не совпадают с ожидаемым значением"),
+                        "Маска ввода не совпадают с ожидаемым значением"),
                 () -> Assertions.assertEquals("E-mail для отправки чека",
                         orcForm.getEmailInputFieldPlaceHolderDebt(),
-                        "Маски ввода не совпадают с ожидаемым значением")
+                        "Маска ввода не совпадают с ожидаемым значением")
         );
     }
 
     @Test
-    @DisplayName("Тест ")
-    void test() {
-        orcForm.selectCommunicationServicesPaymentType();
-        Assertions.assertEquals("Услуги связи", orcForm.getActualPaymentSection(),
-                "Раздел оплаты не соответствует проверяемому");
-        logger.info("Выбран верный раздел оплаты");
-        orcForm.fillCommunicationServicesDataSection(10);
-        iFramePaymentPage.switchToIFrame();
-        logger.info("Переход на форму заполнения данных о карте");
-        Assertions.assertTrue(iFramePaymentPage.hasMaestroLogo());
+    @DisplayName("Проверка масок ввода в полях для заполнения данных банковской карты ")
+    void inputMaskCardFormFieldsTest() {
+        iFramePaymentPage.openCardDataPage();
+        Assertions.assertTrue(iFramePaymentPage.isCardDataFormAvailable(),
+                "Переход на форму заполнения данных о карте не осуществлен");
         logger.info("Форма заполнения данных банковской карты получена");
+        Assertions.assertAll(
+                () -> Assertions.assertEquals("Номер карты",
+                        iFramePaymentPage.getCardNumberInputFieldPlaceHolder(),
+                        "Маска ввода не совпадают с ожидаемым значением"),
+                () -> Assertions.assertEquals("Срок действия",
+                        iFramePaymentPage.getCardExpirationDateInputFieldPlaceHolder(),
+                        "Маска ввода не совпадают с ожидаемым значением"),
+                () -> Assertions.assertEquals("CVC",
+                        iFramePaymentPage.getCvcInputFieldPlaceHolder(),
+                        "Маска ввода не совпадают с ожидаемым значением"),
+                () -> Assertions.assertEquals("Имя держателя (как на карте)",
+                        iFramePaymentPage.getCardHolderNameInputFieldPlaceHolder(),
+                        "Маска ввода не совпадают с ожидаемым значением")
+        );
+    }
+
+    @Test
+    @DisplayName("Тест наличия логотипов платежных систем на форме заполнения данных о карте пользователя")
+    void logoPaymentSystemsAvailableTest() {
+        iFramePaymentPage.openCardDataPage();
+        iFramePaymentPage.getPaymentsLogo().forEach(
+                locator -> {
+                    Assertions.assertAll(() ->
+                            Assertions.assertTrue(iFramePaymentPage.isLogoPresent(locator),
+                                    String.format("Лого %s не появилось", locator)));
+                });
+    }
+
+    @Test
+    @DisplayName("Тест достоверности вводимых значений суммы и номера телефона ")
+    void Test() {
+        iFramePaymentPage.openCardDataPage();
+        Assertions.assertAll(
+                () -> Assertions.assertEquals(TEST_SUM,
+                        iFramePaymentPage.getPayDescriptionCostInputMaskText().split(" ")[0],
+                        "Отображаемая сумма не соответствует ожидаемой"),
+                () -> Assertions.assertEquals(TEST_SUM,
+                        iFramePaymentPage.getButtonSubmitPaymentInputMaskText().split(" ")[1],
+                        "Отображаемая сумма не соответствует ожидаемой"),
+                () -> Assertions.assertEquals("375" + TEST_PHONE_NUMBER,
+                        iFramePaymentPage.getPhoneNumberShowHeaderInputMaskText().split(":")[2].trim(),
+                        "Отображаемый номер телефона не соответствует ожидаемому")
+        );
     }
 }

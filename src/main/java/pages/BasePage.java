@@ -1,10 +1,8 @@
 package pages;
 
-import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.By;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -17,6 +15,7 @@ public class BasePage {
     private static final int WAIT_DURATION = 5;
     private static final String MTS_URL = "https://www.mts.by/";
     private static final String BASE_URL_HEADER = "МТС – мобильный оператор в Беларуси";
+
     private final Logger logger = Logger.getLogger(BasePage.class.getName());
 
     protected final WebDriver driver;
@@ -38,6 +37,17 @@ public class BasePage {
         }
     }
 
+    public boolean isLogoPresent(By locator) {
+        try {
+            wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
+            logger.info(String.format("Логотип %s найден на странице", locator));
+        } catch (TimeoutException e) {
+            logger.info("Не найден логотип" + locator);
+            return false;
+        }
+        return true;
+    }
+
     public void checkPayFormLoaded() {
         wait.until(ExpectedConditions.visibilityOfElementLocated(payFormWrapper));
     }
@@ -45,4 +55,5 @@ public class BasePage {
     public void closeBrowser() {
         driver.quit();
     }
+
 }
