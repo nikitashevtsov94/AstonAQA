@@ -11,6 +11,12 @@ import java.util.List;
 import java.util.logging.Logger;
 
 public class OnlineReplenishmentWithoutCommissionForm extends BasePage {
+
+    private final Logger logger = Logger.getLogger(OnlineReplenishmentWithoutCommissionForm.class.getName());
+
+    private static final String ATTRIBUTE_NAME = "placeholder";
+
+    private final By payFormWrapper = By.className("pay__wrapper");
     private final By formHeader = By.xpath("//h2[normalize-space(.)='Онлайн пополнение без комиссии']");
     private final By visaLogo = By.xpath("//img[@alt='Visa']");
     private final By verifiedByVisa = By.xpath("//img[@alt='Verified By Visa']");
@@ -24,8 +30,8 @@ public class OnlineReplenishmentWithoutCommissionForm extends BasePage {
     private final By phoneNumberInputFieldCommunicationServices = By.id("connection-phone");
     private final By moneySumInputFieldCommunicationServices = By.id("connection-sum");
     private final By emailInputFieldCommunicationServices = By.id("connection-email");
-    private final By continuePayFormButtonCommunicationServices
-            = By.xpath("//form[@id='pay-connection']//button[@type='submit']");
+    private final By continuePayFormButtonCommunicationServices =
+            By.xpath("//form[@id='pay-connection']//button[@type='submit']");
     private final By homeInternet = By.xpath("//p[contains(text(),'Домашний интернет')]");
     private final By subscriberPhoneNumberInputFieldHomeInternet = By.id("internet-phone");
     private final By moneySumInputFieldHomeInternet = By.id("internet-sum");
@@ -39,16 +45,17 @@ public class OnlineReplenishmentWithoutCommissionForm extends BasePage {
     private final By moneySumInputFieldDebt = By.id("arrears-sum");
     private final By emailInputFieldDebt = By.id("arrears-email");
 
-    private final Logger logger = Logger.getLogger(OnlineReplenishmentWithoutCommissionForm.class.getName());
-
-    private static final String TEST_PHONE_NUMBER = "297777777";
-
     public OnlineReplenishmentWithoutCommissionForm(WebDriver driver) {
         super(driver);
     }
 
+    public void checkPayFormLoaded() {
+        wait.until(ExpectedConditions.visibilityOfElementLocated(payFormWrapper));
+    }
+
     public String getOrcFormHeader() {
-        return wait.until(ExpectedConditions.visibilityOfElementLocated(formHeader)).getText().replace("\n", StringUtils.SPACE);
+        return wait.until(ExpectedConditions.visibilityOfElementLocated(formHeader)).getText()
+                .replace("\n", StringUtils.SPACE);
     }
 
     public List<By> getPaymentsLogo() {
@@ -61,7 +68,7 @@ public class OnlineReplenishmentWithoutCommissionForm extends BasePage {
 
     public void typePhoneNumber() {
         wait.until(ExpectedConditions.elementToBeClickable(phoneNumberInputFieldCommunicationServices)).click();
-        driver.findElement(phoneNumberInputFieldCommunicationServices).sendKeys(TEST_PHONE_NUMBER);
+        driver.findElement(phoneNumberInputFieldCommunicationServices).sendKeys(TestData.TEST_PHONE_NUMBER);
     }
 
     public void typePaymentSum(int sum) {
@@ -109,52 +116,50 @@ public class OnlineReplenishmentWithoutCommissionForm extends BasePage {
     }
 
     public String getPhoneNumberPlaceHolderCommunicationServices() {
-        return driver.findElement(phoneNumberInputFieldCommunicationServices).getDomAttribute("placeholder");
+        return driver.findElement(phoneNumberInputFieldCommunicationServices).getDomAttribute(ATTRIBUTE_NAME);
     }
 
     public String getMoneySumInputFieldPlaceHolderCommunicationServices() {
-        return driver.findElement(moneySumInputFieldCommunicationServices).getDomAttribute("placeholder");
+        return driver.findElement(moneySumInputFieldCommunicationServices).getDomAttribute(ATTRIBUTE_NAME);
     }
 
     public String getEmailInputFieldPlaceHolderCommunicationServices() {
-        return driver.findElement(emailInputFieldCommunicationServices).getDomAttribute("placeholder");
+        return driver.findElement(emailInputFieldCommunicationServices).getDomAttribute(ATTRIBUTE_NAME);
     }
 
     public String getSubscriberPhoneNumberInputFieldPlaceHolderHomeInternet() {
-        return driver.findElement(subscriberPhoneNumberInputFieldHomeInternet).getDomAttribute("placeholder");
+        return driver.findElement(subscriberPhoneNumberInputFieldHomeInternet).getDomAttribute(ATTRIBUTE_NAME);
     }
 
     public String getMoneySumInputFieldPlaceHolderHomeInternet() {
-        return driver.findElement(moneySumInputFieldHomeInternet).getDomAttribute("placeholder");
+        return driver.findElement(moneySumInputFieldHomeInternet).getDomAttribute(ATTRIBUTE_NAME);
     }
 
     public String getEmailInputFieldPlaceHolderHomeInternet() {
-        return driver.findElement(emailInputFieldHomeInternet).getDomAttribute("placeholder");
+        return driver.findElement(emailInputFieldHomeInternet).getDomAttribute(ATTRIBUTE_NAME);
     }
 
     public String getAccountNumberInputFieldPlaceHolderInstallmentPlan() {
-        return driver.findElement(accountNumberInputFieldInstallmentPlan).getDomAttribute("placeholder");
+        return driver.findElement(accountNumberInputFieldInstallmentPlan).getDomAttribute(ATTRIBUTE_NAME);
     }
 
     public String getMoneySumInputFieldPlaceHolderInstallmentPlan() {
-        return driver.findElement(moneySumInputFieldInstallmentPlan).getDomAttribute("placeholder");
+        return driver.findElement(moneySumInputFieldInstallmentPlan).getDomAttribute(ATTRIBUTE_NAME);
     }
 
     public String getEmailInputFieldPlaceHolderInstallmentPlan() {
-        return driver.findElement(emailInputFieldInstallmentPlan).getDomAttribute("placeholder");
+        return driver.findElement(emailInputFieldInstallmentPlan).getDomAttribute(ATTRIBUTE_NAME);
     }
 
     public String getAccountNumberInputFieldPlaceHolderDebt() {
-        return driver.findElement(accountNumberInputFieldDebt).getDomAttribute("placeholder");
+        return driver.findElement(accountNumberInputFieldDebt).getDomAttribute(ATTRIBUTE_NAME);
     }
 
     public String getMoneySumInputFieldPlaceHolderDebt() {
-        return driver.findElement(moneySumInputFieldDebt).getDomAttribute("placeholder");
+        return driver.findElement(moneySumInputFieldDebt).getDomAttribute(ATTRIBUTE_NAME);
     }
 
     public String getEmailInputFieldPlaceHolderDebt() {
-        return driver.findElement(emailInputFieldDebt).getDomAttribute("placeholder");
+        return driver.findElement(emailInputFieldDebt).getDomAttribute(ATTRIBUTE_NAME);
     }
-
-
 }

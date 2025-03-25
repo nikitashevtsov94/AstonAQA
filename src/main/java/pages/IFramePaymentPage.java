@@ -9,6 +9,9 @@ import java.util.List;
 import java.util.logging.Logger;
 
 public class IFramePaymentPage extends BasePage {
+
+    private final Logger logger = Logger.getLogger(IFramePaymentPage.class.getName());
+
     private final By iFrame = By.className("bepaid-iframe");
     private final By creditCardDataForm = By.xpath("//div[contains(@class,'card ng-tns')]");
     private final By payDescriptionCost = By.xpath("//span[normalize-space()='10.00 BYN']");
@@ -23,8 +26,6 @@ public class IFramePaymentPage extends BasePage {
     private final By belCardLogo = By.xpath("//img[@src='assets/images/payment-icons/card-types/belkart-system.svg']");
     private final By maestroLogo = By.xpath("//img[@src='assets/images/payment-icons/card-types/maestro-system.svg']");
     private final By mirLogo = By.xpath("//img[@src='assets/images/payment-icons/card-types/mir-system-ru.svg']");
-
-    private final Logger logger = Logger.getLogger(IFramePaymentPage.class.getName());
 
     private final OnlineReplenishmentWithoutCommissionForm orcForm = new OnlineReplenishmentWithoutCommissionForm(driver);
 
@@ -58,7 +59,7 @@ public class IFramePaymentPage extends BasePage {
 
     public void openCardDataPage() {
         orcForm.selectCommunicationServicesPaymentType();
-        orcForm.fillAndAcceptCommunicationServicesDataSection(10);
+        orcForm.fillAndAcceptCommunicationServicesDataSection(TestData.INPUT_SUM);
         logger.info("Переход на форму заполнения данных о карте");
         switchToIFrame();
     }
@@ -78,6 +79,4 @@ public class IFramePaymentPage extends BasePage {
     public String getPhoneNumberShowHeaderInputMaskText() {
         return wait.until(ExpectedConditions.visibilityOfElementLocated(phoneNumberShowHeader)).getText();
     }
-
-
 }

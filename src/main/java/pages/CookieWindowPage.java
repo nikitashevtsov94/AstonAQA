@@ -8,11 +8,15 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import java.util.logging.Logger;
 
 public class CookieWindowPage extends BasePage {
-    private final By cookieAgreeButton = By.id("cookie-agree");
+
     private final Logger logger = Logger.getLogger(CookieWindowPage.class.getName());
+
+    private final By cookieAgreeButton = By.id("cookie-agree");
+
     public CookieWindowPage(WebDriver driver) {
         super(driver);
     }
+
     public void acceptCookie() {
         try {
             wait.until(ExpectedConditions.elementToBeClickable(cookieAgreeButton)).click();

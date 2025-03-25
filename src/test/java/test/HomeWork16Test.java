@@ -1,6 +1,7 @@
 package test;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
+import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -14,13 +15,11 @@ import pages.CookieWindowPage;
 import pages.DetailsAboutServicePage;
 import pages.IFramePaymentPage;
 import pages.OnlineReplenishmentWithoutCommissionForm;
+import pages.TestData;
 
 import java.util.logging.Logger;
 
 class HomeWork16Test {
-
-    private static final String TEST_PHONE_NUMBER = "297777777";
-    private static final String TEST_SUM = "10.00";
 
     private static BasePage mtsMain;
     private static CookieWindowPage cookieForm;
@@ -45,7 +44,7 @@ class HomeWork16Test {
     void setUpDriverObject() {
         mtsMain.loadBaseUrl();
         cookieForm.acceptCookie();
-        mtsMain.checkPayFormLoaded();
+        orcForm.checkPayFormLoaded();
     }
 
     @AfterEach
@@ -56,7 +55,7 @@ class HomeWork16Test {
     @Test
     @DisplayName("Тест на соответствие названия блока «Онлайн пополнение без комиссии»")
     void OnlineReplenishmentWithoutCommissionHeaderTest() {
-        Assertions.assertEquals("Онлайн пополнение без комиссии", orcForm.getOrcFormHeader());
+        Assertions.assertEquals(TestData.PAYMENT_FORM_HEADER, orcForm.getOrcFormHeader());
     }
 
     @Test
@@ -83,7 +82,7 @@ class HomeWork16Test {
         Assertions.assertEquals("Услуги связи", orcForm.getActualPaymentSection(),
                 "Раздел оплаты не соответствует проверяемому");
         logger.info("Выбран верный раздел оплаты");
-        orcForm.fillAndAcceptCommunicationServicesDataSection(10);
+        orcForm.fillAndAcceptCommunicationServicesDataSection(TestData.INPUT_SUM);
         logger.info("Переход на форму заполнения данных о карте");
         iFramePaymentPage.switchToIFrame();
         Assertions.assertTrue(iFramePaymentPage.isCardDataFormAvailable(),
@@ -108,7 +107,6 @@ class HomeWork16Test {
                         orcForm.getEmailInputFieldPlaceHolderCommunicationServices(),
                         "Маска ввода не совпадают с ожидаемым значением")
         );
-
     }
 
     @Test()
@@ -208,13 +206,13 @@ class HomeWork16Test {
     void Test() {
         iFramePaymentPage.openCardDataPage();
         Assertions.assertAll(
-                () -> Assertions.assertEquals(TEST_SUM,
-                        iFramePaymentPage.getPayDescriptionCostInputMaskText().split(" ")[0],
+                () -> Assertions.assertEquals(TestData.TEST_SUM,
+                        iFramePaymentPage.getPayDescriptionCostInputMaskText().split(StringUtils.SPACE)[0],
                         "Отображаемая сумма не соответствует ожидаемой"),
-                () -> Assertions.assertEquals(TEST_SUM,
-                        iFramePaymentPage.getButtonSubmitPaymentInputMaskText().split(" ")[1],
+                () -> Assertions.assertEquals(TestData.TEST_SUM,
+                        iFramePaymentPage.getButtonSubmitPaymentInputMaskText().split(StringUtils.SPACE)[1],
                         "Отображаемая сумма не соответствует ожидаемой"),
-                () -> Assertions.assertEquals("375" + TEST_PHONE_NUMBER,
+                () -> Assertions.assertEquals("375" + TestData.TEST_PHONE_NUMBER,
                         iFramePaymentPage.getPhoneNumberShowHeaderInputMaskText().split(":")[2].trim(),
                         "Отображаемый номер телефона не соответствует ожидаемому")
         );
