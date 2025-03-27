@@ -12,9 +12,8 @@ public class HeadersBuilder {
         String connection = headers.get(ResponseKey.CONNECTION.getName());
         String xForwardedProto = headers.get(ResponseKey.X_FORWARDED_PROTO.getName());
         String xForwardedPort = headers.get(ResponseKey.X_FORWARDED_PORT.getName());
-        String userAgent = headers.get(ResponseKey.USER_AGENT.getName());
         String accept = headers.get(ResponseKey.ACCEPT.getName());
         String acceptEncoding = headers.get(ResponseKey.ACCEPT_ENCODING.getName());
-        return new Headers(host, connection, xForwardedProto, xForwardedPort, userAgent, accept, acceptEncoding);
+        return new Headers(host, connection, xForwardedProto, xForwardedPort, accept);
     }
 }

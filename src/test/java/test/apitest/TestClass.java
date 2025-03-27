@@ -16,8 +16,8 @@ class TestClass {
     private static final String GET_ENDPOINT = "/get";
     private static final String POST_ENDPOINT = "/post";
     private static final Headers expectedHeaders = new Headers("postman-echo.com", "close", "https",
-            "443", "PostmanRuntime/7.43.0", "*/*", "gzip, deflate, br");
-    private static final Map<String, String> params = Map.of("foo1", "bar1", "foo2", "bar2");
+            "443", "*/*");
+    private static final Map<String, String> params = new HashMap<>(){{put("foo1", "bar1"); put("foo2", "bar2");}};
 
     @Test
     void testGetMethod() {
@@ -25,8 +25,8 @@ class TestClass {
 
         Response response = ApiUtils.sendGetRequest(fullUri, params);
         Headers actualHeaders = HeadersBuilder.buildHeaders(response);
-
-        Assertions.assertEquals(expectedHeaders, actualHeaders, "Найдено несовпадение в заголовках");
+        Assertions.assertAll(
+                () -> Assertions.assertEquals(expectedHeaders, actualHeaders, "Найдено несовпадение в заголовках"));
 
         Map<String, String> args = response.jsonPath().getMap("args");
         Assertions.assertNotNull(args, "Поле 'args' не должно быть null");

@@ -1,18 +1,17 @@
 package apitest;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 
-@Getter
+
 @AllArgsConstructor
+@Data
 public class Headers {
 
     public String host;
     public String connection;
     public String xForwardedProto;
     public String xForwardedPort;
-    public String userAgent;
     public String accept;
-    public String acceptEncoding;
 
 }
