@@ -39,4 +39,17 @@ public class ApiUtils {
                 .log().all()
                 .extract().response();
     }
+
+    public Response sendPostRequest(String uri, Map<String, String> params) {
+        RestAssured.baseURI = uri;
+        return given()
+                .contentType(ContentType.JSON)
+                .body(params)
+                .when()
+                .post()
+                .then()
+                .statusCode(200)
+                .log().all()
+                .extract().response();
+    }
 }

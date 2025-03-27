@@ -11,7 +11,7 @@ public enum ResponseKey {
     CONNECTION("connection"),
     X_FORWARDED_PROTO("x-forwarded-proto"),
     X_FORWARDED_PORT("x-forwarded-port"),
-    USER_ASGENT("user-agent"),
+    USER_AGENT("user-agent"),
     ACCEPT("accept"),
     ACCEPT_ENCODING("accept-encoding");
 
