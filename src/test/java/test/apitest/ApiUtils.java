@@ -95,4 +95,10 @@ public class ApiUtils {
                 .log().all()
                 .extract().response();
     }
+    static String getResponseUrl(Response response) {
+        return response.jsonPath().getString("url");
+    }
+    static String getResponseData(Response response) {
+        return response.jsonPath().getString("data");
+    }
 }
