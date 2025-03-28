@@ -27,7 +27,7 @@ public class ApiUtils {
                 .response();
     }
 
-    public Response sendPostRequest(String uri, String requestBody) {
+    public Response sendPostRequestRaw(String uri, String requestBody) {
         RestAssured.baseURI = uri;
         return given()
                 .contentType(ContentType.JSON)
@@ -40,13 +40,56 @@ public class ApiUtils {
                 .extract().response();
     }
 
-    public Response sendPostRequest(String uri, Map<String, String> params) {
+    public Response sendPostRequestUrlEncoded(String uri, Map<String, String> params) {
+        RestAssured.baseURI = uri;
+        return given()
+                .contentType(ContentType.URLENC.withCharset("UTF-8"))
+                .formParams(params)
+                .log().all()
+                .when()
+                .post()
+                .then()
+                .statusCode(200)
+                .log().all()
+                .extract().response();
+    }
+
+    public Response sendPutRequestRaw(String uri, String requestBody) {
         RestAssured.baseURI = uri;
         return given()
                 .contentType(ContentType.JSON)
-                .body(params)
+                .body(requestBody)
+                .log().all()
                 .when()
-                .post()
+                .put()
+                .then()
+                .statusCode(200)
+                .log().all()
+                .extract().response();
+    }
+
+    public Response sendPatchRequestRaw(String uri, String requestBody) {
+        RestAssured.baseURI = uri;
+        return given()
+                .contentType(ContentType.JSON)
+                .body(requestBody)
+                .log().all()
+                .when()
+                .patch()
+                .then()
+                .statusCode(200)
+                .log().all()
+                .extract().response();
+    }
+
+    public Response sendDeleteRequestRaw(String uri, String requestBody) {
+        RestAssured.baseURI = uri;
+        return given()
+                .contentType(ContentType.JSON)
+                .body(requestBody)
+                .log().all()
+                .when()
+                .delete()
                 .then()
                 .statusCode(200)
                 .log().all()

@@ -7,20 +7,20 @@ import lombok.Data;
 
 public class Headers {
 
-    public String host;
-    public String connection;
-    public String xForwardedProto;
-    public String xForwardedPort;
-    public String accept;
-    public String acceptEncoding;
+    private String host;
+    private String connection;
+    private String xForwardedProto;
+    private String xForwardedPort;
+    private String accept;
+    private String acceptEncoding;
 
-    public String xRequestStart;
-    public String contentLength;
-    public String xAmznTraceId;
-    public String contentType;
-    public String userAgent;
-    public String postmanToken;
-    public String cookie;
+    private String xRequestStart;
+    private String contentLength;
+    private String xAmznTraceId;
+    private String contentType;
+    private String userAgent;
+    private String postmanToken;
+    private String cookie;
 
     public Headers(String xRequestStart, String contentLength, String xAmznTraceId, String contentType,String userAgent, String postmanToken, String cookie) {
         this.xRequestStart = xRequestStart;
