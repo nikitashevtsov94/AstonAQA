@@ -8,7 +8,7 @@ import lombok.Getter;
 public enum ResponseKey {
 
     HOST("host"),
-    X_REQUEST_START ("x-request-start"),
+    X_REQUEST_START("x-request-start"),
     CONNECTION("connection"),
     CONTENT_LENGTH("content-length"),
     X_FORWARDED_PROTO("x-forwarded-proto"),
@@ -21,8 +21,13 @@ public enum ResponseKey {
     ACCEPT_ENCODING("accept-encoding"),
     COOKIE("cookie"),
     GET_PARAM1("foo1"),
-    GET_PARAM2("foo2");
-
+    GET_PARAM2("foo2"),
+    URL("url"),
+    DATA("data"),
+    FORM("form"),
+    JSON("json"),
+    ARGS("args"),
+    HEADERS("headers");
 
     private final String name;
 }

@@ -1,17 +1,15 @@
 package apitest;
 
 import io.restassured.response.Response;
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.experimental.UtilityClass;
 
 import java.util.Map;
 
-//@Data
-//@AllArgsConstructor
+@UtilityClass
 public class HeadersBuilder {
 
     public static Headers buildStaticHeadersGet(Response response) {
-        Map<String,String> headers = response.jsonPath().getMap("headers");
+        Map<String, String> headers = ResponseActions.getResponseHeaders(response);
         String host = headers.get(ResponseKey.HOST.getName());
         String connection = headers.get(ResponseKey.CONNECTION.getName());
         String xForwardedProto = headers.get(ResponseKey.X_FORWARDED_PROTO.getName());
@@ -21,7 +19,7 @@ public class HeadersBuilder {
     }
 
     public static Headers buildStaticHeadersGeneral(Response response) {
-        Map<String,String> headers = response.jsonPath().getMap("headers");
+        Map<String, String> headers = ResponseActions.getResponseHeaders(response);
         String host = headers.get(ResponseKey.HOST.getName());
         String connection = headers.get(ResponseKey.CONNECTION.getName());
         String xForwardedProto = headers.get(ResponseKey.X_FORWARDED_PROTO.getName());
@@ -32,7 +30,7 @@ public class HeadersBuilder {
     }
 
     public static Headers buildDinamHeaders(Response response) {
-        Map<String,String> headers = response.jsonPath().getMap("headers");
+        Map<String, String> headers = ResponseActions.getResponseHeaders(response);
         String xRequestStart = headers.get(ResponseKey.X_REQUEST_START.getName());
         String contentLength = headers.get(ResponseKey.CONTENT_LENGTH.getName());
         String xAmznTraceId = headers.get(ResponseKey.X_AMZN_TRACE_ID.getName());

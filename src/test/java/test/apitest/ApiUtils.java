@@ -4,7 +4,9 @@ import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import lombok.experimental.UtilityClass;
+import org.apache.http.HttpStatus;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
 import static io.restassured.RestAssured.given;
@@ -21,7 +23,7 @@ public class ApiUtils {
                 .when()
                 .get()
                 .then()
-                .statusCode(200)
+                .statusCode(HttpStatus.SC_OK)
                 .log().all()
                 .extract()
                 .response();
@@ -35,7 +37,7 @@ public class ApiUtils {
                 .when()
                 .post()
                 .then()
-                .statusCode(200)
+                .statusCode(HttpStatus.SC_OK)
                 .log().all()
                 .extract().response();
     }
@@ -43,13 +45,13 @@ public class ApiUtils {
     public Response sendPostRequestUrlEncoded(String uri, Map<String, String> params) {
         RestAssured.baseURI = uri;
         return given()
-                .contentType(ContentType.URLENC.withCharset("UTF-8"))
+                .contentType(ContentType.URLENC.withCharset(StandardCharsets.UTF_8))
                 .formParams(params)
                 .log().all()
                 .when()
                 .post()
                 .then()
-                .statusCode(200)
+                .statusCode(HttpStatus.SC_OK)
                 .log().all()
                 .extract().response();
     }
@@ -63,7 +65,7 @@ public class ApiUtils {
                 .when()
                 .put()
                 .then()
-                .statusCode(200)
+                .statusCode(HttpStatus.SC_OK)
                 .log().all()
                 .extract().response();
     }
@@ -77,7 +79,7 @@ public class ApiUtils {
                 .when()
                 .patch()
                 .then()
-                .statusCode(200)
+                .statusCode(HttpStatus.SC_OK)
                 .log().all()
                 .extract().response();
     }
@@ -91,14 +93,8 @@ public class ApiUtils {
                 .when()
                 .delete()
                 .then()
-                .statusCode(200)
+                .statusCode(HttpStatus.SC_OK)
                 .log().all()
                 .extract().response();
-    }
-    static String getResponseUrl(Response response) {
-        return response.jsonPath().getString("url");
-    }
-    static String getResponseData(Response response) {
-        return response.jsonPath().getString("data");
     }
 }
