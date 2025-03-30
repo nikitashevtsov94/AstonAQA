@@ -19,7 +19,10 @@ public enum ResponseKey {
     ACCEPT("accept"),
     POSTMAN_TOKEN("postman-token"),
     ACCEPT_ENCODING("accept-encoding"),
-    COOKIE("cookie");
+    COOKIE("cookie"),
+    GET_PARAM1("foo1"),
+    GET_PARAM2("foo2");
+
 
     private final String name;
 }

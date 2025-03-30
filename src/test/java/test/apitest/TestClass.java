@@ -2,6 +2,7 @@ package apitest;
 
 import io.restassured.response.Response;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
@@ -17,7 +18,8 @@ class TestClass {
     private static final String PATCH_ENDPOINT = "/patch";
     private static final String DELETE_ENDPOINT = "/delete";
     private static final Headers expectedGetHeaders = new Headers("postman-echo.com", "close", "https", "443", "*/*");
-    private static final Headers expectedPostHeaders = new Headers("postman-echo.com", "close", "https", "443", "*/*", "gzip,deflate");
+    private static final Headers expectedGeneralHeaders = new Headers("postman-echo.com", "close", "https", "443", "*/*", "gzip,deflate");
+    private static final Args expectedArgs = new Args("bar1", "bar2");
     private static final Map<String, String> params = new HashMap<>() {{
         put("foo1", "bar1");
         put("foo2", "bar2");
@@ -25,39 +27,36 @@ class TestClass {
     private static final String REQUEST_STRING = "This is expected to be sent back as part of response body.";
 
     @Test
+    @DisplayName("Тест запроса GET")
     void testGetMethod() {
         String fullUri = URI + GET_ENDPOINT;
 
         Response response = ApiUtils.sendGetRequest(fullUri, params);
         Headers actualStaticGetHeaders = HeadersBuilder.buildStaticHeadersGet(response);
-        Assertions.assertAll(
-                () -> Assertions.assertEquals(expectedGetHeaders, actualStaticGetHeaders, "Найдено несовпадение в заголовках"));
-
         Headers actualDinamicGetHeaders = HeadersBuilder.buildDinamHeaders(response);
-        Assertions.assertNotNull(actualDinamicGetHeaders, "Присутствуют пустые заголовки");
-
-        Map<String, String> args = response.jsonPath().getMap("args");
-        Assertions.assertEquals("bar1", args.get("foo1"), "Значение 'foo1' неверное");
-        Assertions.assertEquals("bar2", args.get("foo2"), "Значение 'foo2' неверное");
-
-        Assertions.assertEquals("https://postman-echo.com/get?foo1=bar1&foo2=bar2", ApiUtils.getResponseUrl(response), "URL не совпадает");
+        checkResponseHeaders(actualStaticGetHeaders, actualDinamicGetHeaders, expectedGetHeaders);
+        Args actualArgsValues = ArgsBuilder.buildArgs(response);
+        Assertions.assertEquals(expectedArgs, actualArgsValues, "Значение ключа неверно");
+        Assertions.assertEquals(fullUri + "?foo1=bar1&foo2=bar2", ApiUtils.getResponseUrl(response), "URL не совпадает");
     }
 
     @Test
+    @DisplayName("Тест запроса POST со строкой")
     void testPostMethodString() {
         String fullUri = URI + POST_ENDPOINT;
 
         Response response = ApiUtils.sendPostRequestRaw(fullUri, REQUEST_STRING);
-        Assertions.assertEquals("This is expected to be sent back as part of response body.", ApiUtils.getResponseData(response));
+        Assertions.assertEquals(REQUEST_STRING, ApiUtils.getResponseData(response));
 
         Headers actualStaticPostHeaders = HeadersBuilder.buildStaticHeadersGeneral(response);
         Headers actualDinamicPostHeaders = HeadersBuilder.buildDinamHeaders(response);
-        checkResponseHeaders(actualStaticPostHeaders, actualDinamicPostHeaders);
+        checkResponseHeaders(actualStaticPostHeaders, actualDinamicPostHeaders, expectedGeneralHeaders);
         Assertions.assertNull(response.jsonPath().get("json"));
-        Assertions.assertEquals("https://postman-echo.com/post", ApiUtils.getResponseUrl(response), "URL не совпадает");
+        Assertions.assertEquals(fullUri, ApiUtils.getResponseUrl(response), "URL не совпадает");
     }
 
     @Test
+    @DisplayName("Тест запроса POST с параметрами")
     void testPostMethodData() {
         String fullUri = URI + POST_ENDPOINT;
 
@@ -66,58 +65,61 @@ class TestClass {
         Assertions.assertEquals(params, response.jsonPath().get("form"));
         Headers actualStaticPostHeaders = HeadersBuilder.buildStaticHeadersGeneral(response);
         Headers actualDinamicPostHeaders = HeadersBuilder.buildDinamHeaders(response);
-        checkResponseHeaders(actualStaticPostHeaders, actualDinamicPostHeaders);
+        checkResponseHeaders(actualStaticPostHeaders, actualDinamicPostHeaders, expectedGeneralHeaders);
         Assertions.assertEquals(params, response.jsonPath().get("json"), "Найдено несовпадение в заголовках");
-        Assertions.assertEquals("https://postman-echo.com/post", ApiUtils.getResponseUrl(response), "URL не совпадает");
+        Assertions.assertEquals(fullUri, ApiUtils.getResponseUrl(response), "URL не совпадает");
     }
 
     @Test
+    @DisplayName("Тест запроса PUT")
     void testPutMethodeString() {
         String fullUri = URI + PUT_ENDPOINT;
 
         Response response = ApiUtils.sendPutRequestRaw(fullUri, REQUEST_STRING);
 
-        Assertions.assertEquals("This is expected to be sent back as part of response body.", ApiUtils.getResponseData(response));
+        Assertions.assertEquals(REQUEST_STRING, ApiUtils.getResponseData(response));
 
         Headers actualStaticPostHeaders = HeadersBuilder.buildStaticHeadersGeneral(response);
         Headers actualDinamicPostHeaders = HeadersBuilder.buildDinamHeaders(response);
-        checkResponseHeaders(actualStaticPostHeaders, actualDinamicPostHeaders);
+        checkResponseHeaders(actualStaticPostHeaders, actualDinamicPostHeaders, expectedGeneralHeaders);
         Assertions.assertNull(response.jsonPath().get("json"));
-        Assertions.assertEquals("https://postman-echo.com/put", ApiUtils.getResponseUrl(response), "URL не совпадает");
+        Assertions.assertEquals(fullUri, ApiUtils.getResponseUrl(response), "URL не совпадает");
     }
 
     @Test
+    @DisplayName("Тест запроса PATCH")
     void testPatchMethodeString() {
         String fullUri = URI + PATCH_ENDPOINT;
 
         Response response = ApiUtils.sendPatchRequestRaw(fullUri, REQUEST_STRING);
 
-        Assertions.assertEquals("This is expected to be sent back as part of response body.", ApiUtils.getResponseData(response));
+        Assertions.assertEquals(REQUEST_STRING, ApiUtils.getResponseData(response));
 
         Headers actualStaticPostHeaders = HeadersBuilder.buildStaticHeadersGeneral(response);
         Headers actualDinamicPostHeaders = HeadersBuilder.buildDinamHeaders(response);
-        checkResponseHeaders(actualStaticPostHeaders, actualDinamicPostHeaders);
+        checkResponseHeaders(actualStaticPostHeaders, actualDinamicPostHeaders, expectedGeneralHeaders);
         Assertions.assertNull(response.jsonPath().get("json"));
-        Assertions.assertEquals("https://postman-echo.com/patch", ApiUtils.getResponseUrl(response), "URL не совпадает");
+        Assertions.assertEquals(fullUri, ApiUtils.getResponseUrl(response), "URL не совпадает");
     }
 
     @Test
+    @DisplayName("Тест запроса DELETE")
     void testDeleteMethodeString() {
         String fullUri = URI + DELETE_ENDPOINT;
         Response response = ApiUtils.sendDeleteRequestRaw(fullUri, REQUEST_STRING);
 
-        Assertions.assertEquals("This is expected to be sent back as part of response body.", ApiUtils.getResponseData(response));
+        Assertions.assertEquals(REQUEST_STRING, ApiUtils.getResponseData(response));
 
         Headers actualStaticPostHeaders = HeadersBuilder.buildStaticHeadersGeneral(response);
         Headers actualDinamicPostHeaders = HeadersBuilder.buildDinamHeaders(response);
-        checkResponseHeaders(actualStaticPostHeaders, actualDinamicPostHeaders);
+        checkResponseHeaders(actualStaticPostHeaders, actualDinamicPostHeaders, expectedGeneralHeaders);
         Assertions.assertNull(response.jsonPath().get("json"));
-        Assertions.assertEquals("https://postman-echo.com/delete", ApiUtils.getResponseUrl(response), "URL не совпадает");
+        Assertions.assertEquals(fullUri, ApiUtils.getResponseUrl(response), "URL не совпадает");
     }
 
-    static void checkResponseHeaders(Headers actualStaticPostHeaders, Headers actualDinamicPostHeaders) {
+    static void checkResponseHeaders(Headers actualStaticPostHeaders, Headers actualDinamicPostHeaders, Headers expectedHeaders) {
         Assertions.assertAll(
-                () -> Assertions.assertEquals(expectedPostHeaders, actualStaticPostHeaders, "Найдено несовпадение в заголовках"),
+                () -> Assertions.assertEquals(expectedHeaders, actualStaticPostHeaders, "Найдено несовпадение в заголовках"),
                 () -> Assertions.assertNotNull(actualDinamicPostHeaders, "Присутствуют пустые заголовки")
         );
     }

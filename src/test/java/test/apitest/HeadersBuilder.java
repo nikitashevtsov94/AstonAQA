@@ -6,8 +6,8 @@ import lombok.Data;
 
 import java.util.Map;
 
-@Data
-@AllArgsConstructor
+//@Data
+//@AllArgsConstructor
 public class HeadersBuilder {
 
     public static Headers buildStaticHeadersGet(Response response) {
