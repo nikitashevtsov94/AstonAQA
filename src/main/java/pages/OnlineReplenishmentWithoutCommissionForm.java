@@ -1,5 +1,6 @@
 package pages;
 
+import io.qameta.allure.Step;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.TimeoutException;
@@ -57,20 +58,22 @@ public class OnlineReplenishmentWithoutCommissionForm extends BasePage {
         return wait.until(ExpectedConditions.visibilityOfElementLocated(formHeader)).getText()
                 .replace("\n", StringUtils.SPACE);
     }
-
+    @Step("Получение локаторов логотипов платежных систем на форме \"Онлайн пополнение без комиссии\"")
     public List<By> getPaymentsLogo() {
         return Arrays.asList(visaLogo, verifiedByVisa, masterCard, masterCardSecureCode, belCard);
     }
 
+    @Step("Нажатие на гиперссылку \"Подробнее о сервисе\"")
     public void detailsHyperTextClick() {
         wait.until(ExpectedConditions.elementToBeClickable(serviceDetailsHyperText)).click();
     }
 
+    @Step("Ввод номера телефона 29 777 77 77")
     public void typePhoneNumber() {
         wait.until(ExpectedConditions.elementToBeClickable(phoneNumberInputFieldCommunicationServices)).click();
         driver.findElement(phoneNumberInputFieldCommunicationServices).sendKeys(TestData.TEST_PHONE_NUMBER);
     }
-
+    @Step("Ввод денежной суммы 10.00")
     public void typePaymentSum(int sum) {
         wait.until(ExpectedConditions.elementToBeClickable(moneySumInputFieldCommunicationServices)).click();
         driver.findElement(moneySumInputFieldCommunicationServices).sendKeys(String.valueOf(sum));
@@ -79,31 +82,36 @@ public class OnlineReplenishmentWithoutCommissionForm extends BasePage {
     public void clickContinueButtonCommunicationServices() {
         wait.until(ExpectedConditions.elementToBeClickable(continuePayFormButtonCommunicationServices)).click();
     }
-
+    @Step("Выбор типа оплаты \"Услуги связи\"")
     public void selectCommunicationServicesPaymentType() {
         wait.until(ExpectedConditions.elementToBeClickable(paymentTypeButton)).click();
         wait.until(ExpectedConditions.elementToBeClickable(communicationServices)).click();
         logger.info("Вырбран тип оплаты \" Услуги связи\"");
     }
 
+    @Step("Выбор типа оплаты \"Домашний интернет\"")
     public void selectHomeInternetPaymentType() {
         wait.until(ExpectedConditions.elementToBeClickable(paymentTypeButton)).click();
         wait.until(ExpectedConditions.elementToBeClickable(homeInternet)).click();
         logger.info("Вырбран тип оплаты \" Домашний интернет\"");
     }
 
+    @Step("Выбор типа оплаты \"Рассрочка\"")
     public void selectInstallmentPlanPaymentType() {
         wait.until(ExpectedConditions.elementToBeClickable(paymentTypeButton)).click();
         wait.until(ExpectedConditions.elementToBeClickable(installmentPlan)).click();
         logger.info("Вырбран тип оплаты \" Рассрочка\"");
     }
 
+    @Step("Выбор типа оплаты \"Задолженность\"")
     public void selectDebtPaymentType() {
         wait.until(ExpectedConditions.elementToBeClickable(paymentTypeButton)).click();
         wait.until(ExpectedConditions.elementToBeClickable(debt)).click();
         logger.info("Вырбран тип оплаты \" Задолженность\"");
     }
 
+    @Step("Заполнение полей формы \"Онлайн пополнение без комиссии\" тестовыми данными, типа оплаты \"Услуги связи\"," +
+            " нажатие на кнопку Продолжить")
     public void fillAndAcceptCommunicationServicesDataSection(int sum) {
         typePhoneNumber();
         typePaymentSum(sum);
@@ -126,6 +134,7 @@ public class OnlineReplenishmentWithoutCommissionForm extends BasePage {
     public String getEmailInputFieldPlaceHolderCommunicationServices() {
         return driver.findElement(emailInputFieldCommunicationServices).getDomAttribute(ATTRIBUTE_NAME);
     }
+
 
     public String getSubscriberPhoneNumberInputFieldPlaceHolderHomeInternet() {
         return driver.findElement(subscriberPhoneNumberInputFieldHomeInternet).getDomAttribute(ATTRIBUTE_NAME);

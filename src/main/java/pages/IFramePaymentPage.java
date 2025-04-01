@@ -1,5 +1,6 @@
 package pages;
 
+import io.qameta.allure.Step;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -33,6 +34,7 @@ public class IFramePaymentPage extends BasePage {
         super(driver);
     }
 
+    @Step("Переход на форму заполнения данных о платежной карте")
     public void switchToIFrame() {
         wait.until(ExpectedConditions.frameToBeAvailableAndSwitchToIt(iFrame));
     }
@@ -57,13 +59,16 @@ public class IFramePaymentPage extends BasePage {
         return wait.until(ExpectedConditions.visibilityOfElementLocated(cardHolderNameFieldMask)).getText();
     }
 
+    @Step("Переход на форму заполнения данных о платежной карте")
     public void openCardDataPage() {
         orcForm.selectCommunicationServicesPaymentType();
         orcForm.fillAndAcceptCommunicationServicesDataSection(TestData.INPUT_SUM);
         logger.info("Переход на форму заполнения данных о карте");
         switchToIFrame();
+        logger.info("Форма заполнения данных о карте загружена");
     }
 
+    @Step("Получение локаторов логотипов платежных систем форме заполнения данных о платежной карте")
     public List<By> getPaymentsLogo() {
         return Arrays.asList(visaLogo, masterCardLogo, mirLogo, maestroLogo, belCardLogo);
     }

@@ -5,7 +5,7 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public class TestData {
 
-    public static final int WAIT_DURATION = 5;
+    public static final int WAIT_DURATION = 10;
     public static final int INPUT_SUM = 10;
     public static final String MTS_URL = "https://www.mts.by/";
     public static final String BASE_URL_HEADER = "МТС – мобильный оператор в Беларуси";
